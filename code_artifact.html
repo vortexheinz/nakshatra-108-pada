@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>27宿108足 六字大明咒陣法輪盤</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background: radial-gradient(circle at center, #1a202c 0%, #000000 100%);
+            color: #e2e8f0;
+            margin: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* 神秘發光面板 */
+        .mystic-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(212, 175, 55, 0.1);
+        }
+
+        /* 黃金按鈕特效 */
+        .btn-gold {
+            background: linear-gradient(135deg, #b48608 0%, #fde047 50%, #b48608 100%);
+            background-size: 200% auto;
+            color: #111;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);
+            transition: 0.5s;
+        }
+        .btn-gold:hover {
+            background-position: right center;
+            box-shadow: 0 0 25px rgba(234, 179, 8, 0.8);
+            transform: translateY(-2px);
+        }
+        .btn-gold:disabled {
+            background: #475569;
+            box-shadow: none;
+            color: #94a3b8;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        /* 項目發光特效 */
+        .mantra-item {
+            transition: all 0.3s ease;
+        }
+        .mantra-item.active {
+            background: rgba(6, 182, 212, 0.2);
+            border-color: #06b6d4;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            transform: scale(1.02);
+        }
+        .mantra-item.active .syllable {
+            color: #22d3ee;
+            text-shadow: 0 0 10px #22d3ee;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body class="flex flex-col xl:flex-row items-center justify-center p-4 gap-8">
+
+    <!-- 左側：視覺化 Canvas 區塊 -->
+    <div class="relative w-full max-w-[800px] flex-shrink-0">
+        <div class="absolute inset-0 bg-blue-900/10 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+        <canvas id="wheelCanvas" width="800" height="800" class="w-full h-auto aspect-square"></canvas>
+    </div>
+
+    <!-- 右側：控制面板與咒語清單 -->
+    <div class="mystic-panel w-full max-w-[450px] p-6 rounded-2xl flex flex-col gap-6 relative z-10">
+        <div class="text-center border-b border-amber-500/30 pb-4">
+            <h1 class="text-2xl font-bold text-amber-400 tracking-widest drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]">六字大明咒星宿陣法</h1>
+            <p class="text-xs text-slate-400 mt-2">27宿 108足 曼陀羅神聖連線軌跡</p>
+        </div>
+
+        <button id="drawBtn" class="btn-gold w-full py-3 rounded-lg font-bold text-lg tracking-wider flex justify-center items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            繪製六字大明咒陣法
+        </button>
+
+        <div class="flex flex-col gap-2" id="mantraList">
+            <!-- 動態生成咒語清單 -->
+        </div>
+
+        <div class="text-[11px] text-slate-400 leading-relaxed bg-slate-900/50 p-3 rounded-lg border border-slate-700">
+            <span class="text-amber-500 font-bold">陣法解析：</span>從代表清淨滋養的「畢宿」(太陰) 發端，能量匯聚於東南方「星宿、翼宿」三角地帶，隨後強拉至西南方深層淨化的「房宿」(土星)，最後折返東方「鬼宿」圓滿，形成跨越星空的四角立體光輪。
+        </div>
+    </div>
+
+    <script>
+        // 27星宿與九曜基礎資料
+        const NAKSHATRAS = [
+            { name: "婁宿", planet: "☋" }, { name: "胃宿", planet: "♀" }, { name: "昴宿", planet: "☉" },
+            { name: "畢宿", planet: "☽" }, { name: "觜宿", planet: "♂" }, { name: "參宿", planet: "☊" },
+            { name: "井宿", planet: "♃" }, { name: "鬼宿", planet: "♄" }, { name: "柳宿", planet: "☿" },
+            { name: "星宿", planet: "☋" }, { name: "張宿", planet: "♀" }, { name: "翼宿", planet: "☉" },
+            { name: "軫宿", planet: "☽" }, { name: "角宿", planet: "♂" }, { name: "亢宿", planet: "☊" },
+            { name: "氐宿", planet: "♃" }, { name: "房宿", planet: "♄" }, { name: "心宿", planet: "☿" },
+            { name: "尾宿", planet: "☋" }, { name: "箕宿", planet: "♀" }, { name: "斗宿", planet: "☉" },
+            { name: "女宿", planet: "☽" }, { name: "虛宿", planet: "♂" }, { name: "危宿", planet: "☊" },
+            { name: "室宿", planet: "♃" }, { name: "壁宿", planet: "♄" }, { name: "奎宿", planet: "☿" }
+        ];
+
+        // 108足片假名音名對應表 (簡化為平展陣列)
+        const PADA_SOUNDS = [
+            "チュ","チェ","チョ","ラ", "リ","ル","レ","ロ", "ア","イ","ウ","エ",
+            "オ","ヴァ","ヴィ","ヴ", "ヴェ","ヴォ","カ","キ", "ク","ガー","ン","チャー",
+            "ケ","コ","ハ","ヒ", "フ","ヘ","ホ","ダ", "ディ","ドゥ","デ","ド",
+            "マ","ミ","ム","メ", "モ","タ","ティ","トゥ", "テ","ト","パ","ピ",
+            "プ","シャ","ナ","タ", "ペ","ポ","ラ","リ", "ル","レ","ロ","タ",
+            "ティ","トゥ","テ","ト", "ナ","ニ","ヌ","ネ", "ノ","ヤ","イ","ユ",
+            "エ","ヨ","バ","ビ", "ブ","ダ","ファ","ダ", "ベ","ボ","ジャ","ジ",
+            "ジュ","ジェ","ジョ","ガ", "ガ","ギ","グ","ゲ", "ゴ","サ","シ","ス",
+            "セ","ソ","ダ","ディ", "ドゥ","サ","ニャ","ニャ", "デ","ド","チャ","チ"
+        ];
+
+        // 六字大明咒連線節點 (索引值對應 108足 的絕對位置，0-107)
+        // 1. 唵: 畢宿(3)第1足(0) = 3*4+0 = 12
+        // 2. 嘛: 星宿(9)第1足(0) = 9*4+0 = 36
+        // 3. 呢: 房宿(16)第2足(1) = 16*4+1 = 65
+        // 4. 唄: 翼宿(11)第3足(2) = 11*4+2 = 46
+        // 5. 咪: 星宿(9)第2足(1) = 9*4+1 = 37
+        // 6. 吽: 鬼宿(7)第1足(0) = 7*4+0 = 28
+        const MANTRA_NODES = [
+            { syl: "唵", pinyin: "Oṃ", nak: "4. 畢宿", graha: "☽", desc: "40° (第1足)", pIndex: 12 },
+            { syl: "嘛", pinyin: "Ma", nak: "10. 星宿", graha: "☋", desc: "120° (第1足)", pIndex: 36 },
+            { syl: "呢", pinyin: "Ni", nak: "17. 房宿", graha: "♄", desc: "216.7° (第2足)", pIndex: 65 },
+            { syl: "唄", pinyin: "Pa", nak: "12. 翼宿", graha: "☉", desc: "150° (第3足)", pIndex: 46 },
+            { syl: "咪", pinyin: "Mi", nak: "10. 星宿", graha: "☋", desc: "123.3° (第2足)", pIndex: 37 },
+            { syl: "吽", pinyin: "Hūṃ", nak: "8. 鬼宿", graha: "♄", desc: "93.3° (第1足)", pIndex: 28 },
+            { syl: "唵", pinyin: "Oṃ", nak: "回到起點", graha: "", desc: "閉合陣法", pIndex: 12 } // 閉合點
+        ];
+
+        const mantraListContainer = document.getElementById('mantraList');
+        MANTRA_NODES.slice(0, 6).forEach((node, idx) => {
+            mantraListContainer.innerHTML += `
+                <div id="m-item-${idx}" class="mantra-item flex items-center justify-between p-3 rounded-lg border border-slate-700/50 bg-slate-800/30">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold syllable">${idx+1}</div>
+                        <div>
+                            <div class="font-bold text-slate-200 text-lg syllable">${node.syl} <span class="text-xs text-slate-500 ml-1 font-normal">${node.pinyin}</span></div>
+                            <div class="text-[10px] text-slate-400">${node.nak} ${node.graha}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs font-mono text-cyan-400">${node.desc}</div>
+                        <div class="text-[10px] text-slate-500">音名: ${PADA_SOUNDS[node.pIndex]}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Canvas 設定
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+        const CX = W / 2;
+        const CY = H / 2;
+        const MAX_R = Math.min(W, H) / 2 - 20;
+
+        // 尺寸參數
+        const rGrahaInner = MAX_R * 0.4;
+        const rGrahaOuter = MAX_R * 0.55;
+        const rNakOuter = MAX_R * 0.8;
+        const rPadaOuter = MAX_R * 0.98;
+
+        // 角度偏移 (-90度讓0度在正上方12點鐘方向)
+        const OFFSET_ANGLE = -Math.PI / 2;
+
+        let activeNodes = [];
+        let animationProgress = 0; // 0 到 6
+        let isAnimating = false;
+        let animationReq;
+
+        function drawBaseWheel() {
+            ctx.clearRect(0, 0, W, H);
+            
+            // 繪製中心黑洞/發光
+            const grad = ctx.createRadialGradient(CX, CY, 0, CX, CY, rGrahaInner);
+            grad.addColorStop(0, 'rgba(0,0,0,1)');
+            grad.addColorStop(1, 'rgba(15,23,42,0.8)');
+            ctx.fillStyle = grad;
+            ctx.beginPath(); ctx.arc(CX, CY, rGrahaInner, 0, Math.PI*2); ctx.fill();
+
+            // 中心文字
+            ctx.fillStyle = '#fde047';
+            ctx.font = 'bold 24px "Noto Serif TC"';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('六字大明', CX, CY - 15);
+            ctx.font = '16px "Noto Serif TC"';
+            ctx.fillStyle = '#94a3b8';
+            ctx.fillText('108足星宿盤', CX, CY + 15);
+
+            const nakAngle = (Math.PI * 2) / 27;
+            const padaAngle = (Math.PI * 2) / 108;
+
+            ctx.lineWidth = 1;
+            
+            // 繪製 27 星宿與九曜中圈/內圈
+            for (let i = 0; i < 27; i++) {
+                const startA = OFFSET_ANGLE + i * nakAngle;
+                const endA = startA + nakAngle;
+                const midA = startA + nakAngle / 2;
+
+                // 九曜內圈
+                ctx.beginPath();
+                ctx.arc(CX, CY, rGrahaOuter, startA, endA);
+                ctx.arc(CX, CY, rGrahaInner, endA, startA, true);
+                ctx.fillStyle = i % 2 === 0 ? 'rgba(30, 41, 59, 0.4)' : 'rgba(15, 23, 42, 0.4)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.2)';
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(CX + Math.cos(midA) * ((rGrahaInner + rGrahaOuter) / 2), CY + Math.sin(midA) * ((rGrahaInner + rGrahaOuter) / 2));
+                ctx.rotate(midA + Math.PI/2);
+                ctx.fillStyle = '#d97706';
+                ctx.font = '18px sans-serif';
+                ctx.fillText(NAKSHATRAS[i].planet, 0, 0);
+                ctx.restore();
+
+                // 星宿中圈
+                ctx.beginPath();
+                ctx.arc(CX, CY, rNakOuter, startA, endA);
+                ctx.arc(CX, CY, rGrahaOuter, endA, startA, true);
+                ctx.fillStyle = i % 2 === 0 ? 'rgba(15, 23, 42, 0.6)' : 'rgba(30, 41, 59, 0.6)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(CX + Math.cos(midA) * ((rGrahaOuter + rNakOuter) / 2), CY + Math.sin(midA) * ((rGrahaOuter + rNakOuter) / 2));
+                ctx.rotate(midA + Math.PI/2);
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '14px "Noto Serif TC"';
+                ctx.fillText(`${i+1}. ${NAKSHATRAS[i].name}`, 0, 0);
+                ctx.restore();
+            }
+
+            for (let i = 0; i < 108; i++) {
+                const startA = OFFSET_ANGLE + i * padaAngle;
+                const endA = startA + padaAngle;
+                const midA = startA + padaAngle / 2;
+
+                ctx.beginPath();
+                ctx.arc(CX, CY, rPadaOuter, startA, endA);
+                ctx.arc(CX, CY, rNakOuter, endA, startA, true);
+                ctx.fillStyle = i % 2 === 0 ? 'rgba(15, 23, 42, 0.8)' : 'rgba(2, 6, 23, 0.8)';
+                
+                // 若此足對應當前高亮的咒語節點，則給予高亮底色
+                let isHighlighted = false;
+                if(isAnimating) {
+                    for(let j=0; j<Math.floor(animationProgress); j++) {
+                        if(MANTRA_NODES[j].pIndex === i) isHighlighted = true;
+                    }
+                } else if(activeNodes.includes(i)) {
+                    isHighlighted = true;
+                }
+
+                if(isHighlighted) {
+                    ctx.fillStyle = 'rgba(6, 182, 212, 0.4)'; // Cyan highlight
+                }
+
+                ctx.fill();
+                ctx.strokeStyle = isHighlighted ? 'rgba(34, 211, 238, 0.8)' : 'rgba(212, 175, 55, 0.15)';
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(CX + Math.cos(midA) * ((rNakOuter + rPadaOuter) / 2), CY + Math.sin(midA) * ((rNakOuter + rPadaOuter) / 2));
+                ctx.rotate(midA + Math.PI/2);
+                ctx.fillStyle = isHighlighted ? '#ffffff' : '#94a3b8';
+                ctx.font = isHighlighted ? 'bold 12px sans-serif' : '10px sans-serif';
+                ctx.fillText(PADA_SOUNDS[i], 0, 0);
+                ctx.restore();
+            }
+        }
+
+        // 取得節點在畫布上的 x, y 座標 (位於108足圈的中心線)
+        function getNodePos(pIndex) {
+            const padaAngle = (Math.PI * 2) / 108;
+            const angle = OFFSET_ANGLE + (pIndex * padaAngle) + (padaAngle / 2);
+            const r = (rNakOuter + rPadaOuter) / 2;
+            return {
+                x: CX + Math.cos(angle) * r,
+                y: CY + Math.sin(angle) * r
+            };
+        }
+
+        function animateMantra() {
+            drawBaseWheel();
+
+            if (animationProgress > 0) {
+                ctx.save();
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                
+                // 畫出已經經過的連線
+                ctx.beginPath();
+                for (let i = 0; i < MANTRA_NODES.length; i++) {
+                    if (i > Math.floor(animationProgress)) break;
+                    
+                    const pos = getNodePos(MANTRA_NODES[i].pIndex);
+                    if (i === 0) {
+                        ctx.moveTo(pos.x, pos.y);
+                    } else {
+                        // 如果是當前正在畫的那條線，根據小數點進度插值
+                        if (i === Math.floor(animationProgress) + 1 && animationProgress < MANTRA_NODES.length - 1) {
+                            const prevPos = getNodePos(MANTRA_NODES[i-1].pIndex);
+                            const t = animationProgress % 1;
+                            const curX = prevPos.x + (pos.x - prevPos.x) * t;
+                            const curY = prevPos.y + (pos.y - prevPos.y) * t;
+                            ctx.lineTo(curX, curY);
+                        } else {
+                            ctx.lineTo(pos.x, pos.y);
+                        }
+                    }
+                }
+
+                // 神秘陣法連線特效
+                ctx.strokeStyle = '#22d3ee'; // 明亮青色
+                ctx.lineWidth = 3;
+                ctx.shadowColor = '#06b6d4';
+                ctx.shadowBlur = 15;
+                ctx.stroke();
+                
+                // 內層高亮芯線
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1;
+                ctx.shadowBlur = 0;
+                ctx.stroke();
+                ctx.restore();
+
+                // 畫出節點亮光圓點
+                for (let i = 0; i <= Math.floor(animationProgress); i++) {
+                    if(i >= MANTRA_NODES.length) continue;
+                    const pos = getNodePos(MANTRA_NODES[i].pIndex);
+                    
+                    ctx.beginPath();
+                    ctx.arc(pos.x, pos.y, 6, 0, Math.PI*2);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.shadowColor = '#fde047';
+                    ctx.shadowBlur = 20;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+
+                    // 標示咒字
+                    if (i < 6) {
+                        ctx.fillStyle = '#fde047';
+                        ctx.font = 'bold 18px "Noto Serif TC"';
+                        // 稍微往中心偏移一點避免蓋住片假名
+                        const angle = Math.atan2(pos.y - CY, pos.x - CX);
+                        const txtX = pos.x - Math.cos(angle)*25;
+                        const txtY = pos.y - Math.sin(angle)*25;
+                        ctx.fillText(MANTRA_NODES[i].syl, txtX, txtY);
+                    }
+                }
+
+                // 更新左側 UI 高亮
+                const curIdx = Math.min(5, Math.floor(animationProgress));
+                document.querySelectorAll('.mantra-item').forEach((el, idx) => {
+                    if(idx <= curIdx && animationProgress > idx) {
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+                });
+            }
+
+            if (animationProgress < MANTRA_NODES.length - 1) {
+                animationProgress += 0.03; // 動畫速度
+                animationReq = requestAnimationFrame(animateMantra);
+            } else {
+                isAnimating = false;
+                document.getElementById('drawBtn').disabled = false;
+                document.getElementById('drawBtn').innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> 重繪陣法';
+                
+                // 動畫結束，將所有節點加入 active 狀態保持高亮
+                activeNodes = MANTRA_NODES.map(n => n.pIndex);
+            }
+        }
+
+        document.getElementById('drawBtn').addEventListener('click', () => {
+            if(isAnimating) return;
+            
+            // 重置狀態
+            cancelAnimationFrame(animationReq);
+            animationProgress = 0;
+            isAnimating = true;
+            activeNodes = [];
+            document.getElementById('drawBtn').disabled = true;
+            document.getElementById('drawBtn').innerText = '繪製中...';
+            
+            document.querySelectorAll('.mantra-item').forEach(el => el.classList.remove('active'));
+            
+            animateMantra();
+        });
+
+        // 初始繪製一次靜態底圖
+        drawBaseWheel();
+
+    </script>
+</body>
+</html>

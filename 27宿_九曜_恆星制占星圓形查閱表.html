@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>27宿・九曜恆星制占星圓形查閱表</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#f5f1e8;color:#27231e;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif}
+  header{text-align:center;padding:28px 16px 10px}
+  h1{margin:0;font-size:28px;letter-spacing:2px}
+  .sub{margin-top:8px;color:#6c6257;font-size:14px}
+  .wrap{max-width:1180px;margin:auto;padding:10px 18px 40px}
+  .card{background:#fffdf8;border:1px solid #d9d0c2;border-radius:18px;box-shadow:0 5px 20px #00000012;padding:16px}
+  svg{width:100%;height:auto;display:block}
+  .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 18px;margin:10px auto 4px;font-size:13px}
+  .legend span{white-space:nowrap}
+  .dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-2px;margin-right:5px;border:1px solid #777}
+  .hint{text-align:center;color:#756b60;font-size:13px;margin:10px 0 0}
+  .table-wrap{margin-top:22px;overflow:auto;border:1px solid #ddd3c5;border-radius:12px}
+  table{border-collapse:collapse;width:100%;min-width:900px;font-size:13px}
+  th,td{padding:9px 10px;border-bottom:1px solid #e7dfd4;text-align:left;vertical-align:top}
+  th{background:#eee7db;position:sticky;top:0}
+  tr:last-child td{border-bottom:0}
+  .n{text-align:center;width:42px}
+  .planet{font-weight:700}
+  footer{text-align:center;color:#81776c;font-size:12px;margin-top:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>27宿・九曜恆星制占星圓形查閱表</h1>
+  <div class="sub">27 Nakshatra × 中原二十八宿 × 九曜主星 × 核心含義</div>
+</header>
+<div class="wrap">
+<div class="card">
+<svg id="wheel" viewBox="0 0 1000 1000" aria-label="27宿九曜圓形圖"></svg>
+<div class="legend" id="legend"></div>
+<div class="hint">點擊外圈星宿區塊，可在下方表格快速定位；中央顯示九曜循環。</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th class="n">#</th><th>27宿</th><th>中原星宿</th><th>九曜主星</th><th>符號</th><th>核心含義</th></tr></thead>
+<tbody id="rows"></tbody>
+</table>
+</div>
+<footer>資料依前述 27 宿／九曜對照表製作；中國二十八宿與印度 27 宿並非天文座標上的完全等同。</footer>
+</div>
+</div>
+<script>
+const data=[
+["Ashwini 阿說你","婁宿","計都","☋","迅速、療癒、啟動、開端、治療"],
+["Bharani 跋賴你","胃宿","金星","♀","承載、孕育、生命力、責任、轉化"],
+["Krittika 基栗底柯","昴宿","太陽","☉","切割、淨化、火焰、辨別、力量"],
+["Rohini 虜喜尼","畢宿","月亮","☽","滋養、生長、美感、繁衍、物質豐盛"],
+["Mrigashira 摩梨伽尸羅","觜宿","火星","♂","搜尋、探索、好奇、追尋、移動"],
+["Ardra 阿陀羅","參宿","羅睺","☊","風暴、破壞、強烈情緒、轉化、洞察"],
+["Punarvasu 不奈婆修","井宿","木星","♃","回歸、復原、重建、希望、再生"],
+["Pushya 弗沙","鬼宿","土星","♄","滋養、培育、保護、紀律、成長"],
+["Ashlesha 阿沙離沙","柳宿","水星","☿","纏繞、洞察、秘密、智慧、心理力量"],
+["Magha 摩伽","星宿","計都","☋","祖先、傳承、權威、地位、根源"],
+["Purva Phalguni 弗婆頗求尼","張宿","金星","♀","享樂、愛情、創造、休息、感官愉悅"],
+["Uttara Phalguni 郁多羅頗求尼","翼宿","太陽","☉","契約、合作、責任、穩定、承諾"],
+["Hasta 訶莎多","軫宿","月亮","☽","雙手、技藝、掌控、製作、實現"],
+["Chitra 質多羅","角宿","火星","♂","美麗、設計、建造、創造、精準"],
+["Swati 莎底","亢宿","羅睺","☊","獨立、自由、風、彈性、自我發展"],
+["Vishakha 毗釋珂","氐宿","木星","♃","目標、決心、突破、勝利、專注"],
+["Anuradha 阿奴羅陀","房宿","土星","♄","友誼、忠誠、奉獻、合作、持久"],
+["Jyeshtha 折沙他","心宿","水星","☿","長者、權威、保護、洞察、危機處理"],
+["Mula 牟藍","尾宿","計都","☋","根源、拔除、解構、真相、徹底轉化"],
+["Purva Ashadha 弗婆沙他","箕宿","金星","♀","勝利、淨化、說服力、信念、不可征服"],
+["Uttara Ashadha 郁多羅沙他","斗宿","太陽","☉","最終勝利、責任、領導、正義、成就"],
+["Shravana 沙羅波那","女宿","月亮","☽","聆聽、學習、傳播、道路、知識"],
+["Dhanishtha 但你瑟陀","虛宿","火星","♂","節奏、音樂、財富、行動、群體力量"],
+["Shatabhisha 舍多毗沙","危宿","羅睺","☊","療癒、秘密、獨立、研究、揭露真相"],
+["Purva Bhadrapada 弗婆跋陀羅缽柁","室宿","木星","♃","理想、轉化、神秘、犧牲、精神追求"],
+["Uttara Bhadrapada 郁多羅跋陀羅缽柁","壁宿","土星","♄","深度、穩定、耐力、慈悲、內在力量"],
+["Revati 離婆底","奎宿","水星","☿","旅程、保護、引導、完成、抵達、豐足"]
+];
+const colors={"計都":"#6d6875","金星":"#b06a58","太陽":"#c28a2c","月亮":"#7185a5","火星":"#a94b45","羅睺":"#4f5965","木星":"#9a7650","土星":"#59666a","水星":"#668a72"};
+const svg=document.getElementById("wheel"), NS="http://www.w3.org/2000/svg";
+const cx=500,cy=500, rOuter=455,rInner=300, step=360/27;
+function pt(r,a){let t=(a-90)*Math.PI/180;return [cx+r*Math.cos(t),cy+r*Math.sin(t)]}
+function pathArc(r1,r2,a1,a2){
+ let p1=pt(r2,a1),p2=pt(r2,a2),p3=pt(r1,a2),p4=pt(r1,a1);
+ let large=(a2-a1)>180?1:0;
+ return `M ${p1[0]} ${p1[1]} A ${r2} ${r2} 0 ${large} 1 ${p2[0]} ${p2[1]} L ${p3[0]} ${p3[1]} A ${r1} ${r1} 0 ${large} 0 ${p4[0]} ${p4[1]} Z`;
+}
+function add(tag,attrs,parent=svg){let e=document.createElementNS(NS,tag);for(let k in attrs)e.setAttribute(k,attrs[k]);parent.appendChild(e);return e}
+add("circle",{cx,cy,r:460,fill:"#f7f0e4",stroke:"#9b8d7b","stroke-width":3});
+data.forEach((d,i)=>{
+ let a1=i*step+0.7,a2=(i+1)*step-0.7,mid=(a1+a2)/2;
+ add("path",{d:pathArc(rInner,rOuter,a1,a2),fill:colors[d[2]],"fill-opacity":.83,stroke:"#fffdf8","stroke-width":2});
+ let [x,y]=pt(378,mid);
+ let t=add("text",{x,y,"text-anchor":"middle","dominant-baseline":"middle",fill:"#fff", "font-size":"13","font-weight":"700","transform":`rotate(${mid} ${x} ${y})`});
+ t.textContent=(i+1)+" "+d[0].split(" ")[0];
+ let [ix,iy]=pt(322,mid);
+ let tt=add("text",{x:ix,y:iy,"text-anchor":"middle","dominant-baseline":"middle",fill:"#302a24","font-size":"11"});
+ tt.textContent=d[1];
+ add("circle",{cx:cx,cy:cy,r:295,fill:"#fffdf8",stroke:"#b9aa97","stroke-width":2});
+});
+add("circle",{cx,cy,r:160,fill:"#f2eadc",stroke:"#8d7c68","stroke-width":2});
+let title=add("text",{x:500,y:465,"text-anchor":"middle",fill:"#332c25","font-size":"26","font-weight":"700"}); title.textContent="九曜";
+let sub=add("text",{x:500,y:495,"text-anchor":"middle",fill:"#6e6256","font-size":"14"}); sub.textContent="每 9 宿循環";
+["計都 ☋","金星 ♀","太陽 ☉","月亮 ☽","火星 ♂","羅睺 ☊","木星 ♃","土星 ♄","水星 ☿"].forEach((s,i)=>{
+ let a=i*40-20; let [x,y]=pt(105,a); let t=add("text",{x,y,"text-anchor":"middle","dominant-baseline":"middle",fill:"#40382f","font-size":"12","font-weight":"600"});t.textContent=s;
+});
+data.forEach((d,i)=>{
+ const tr=document.createElement("tr");
+ tr.innerHTML=`<td class="n">${i+1}</td><td>${d[0]}</td><td>${d[1]}</td><td class="planet">${d[2]}</td><td>${d[3]}</td><td>${d[4]}</td>`;
+ document.getElementById("rows").appendChild(tr);
+});
+Object.entries(colors).forEach(([k,v])=>{
+ const s=document.createElement("span");s.innerHTML=`<i class="dot" style="background:${v}"></i>${k}`;document.getElementById("legend").appendChild(s);
+});
+</script>
+</body>
+</html>

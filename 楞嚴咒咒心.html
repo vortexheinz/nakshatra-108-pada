@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>楞嚴咒咒心 × 108足 落點連線</title>
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--txt:#e6edf3;--sub:#8b949e;}
+  *{box-sizing:border-box;}
+  body{
+    margin:0;min-height:100vh;
+    background:radial-gradient(circle at 50% 30%,#1a2233 0%,#0d1117 72%);
+    color:var(--txt);
+    font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+    display:flex;flex-direction:column;align-items:center;padding:24px 12px 60px;
+  }
+  h1{font-size:1.4rem;font-weight:700;margin:0 0 4px;text-align:center;}
+  .subtitle{color:var(--sub);font-size:.8rem;margin-bottom:6px;text-align:center;}
+  .mantra{
+    font-size:.82rem;color:#ffdf8a;margin-bottom:12px;text-align:center;
+    max-width:940px;line-height:1.7;font-family:"SF Mono",Consolas,monospace;
+  }
+  .stage{position:relative;width:min(96vw,940px);aspect-ratio:1/1;}
+  .center-info{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:30%;aspect-ratio:1/1;border-radius:50%;
+    background:var(--panel);border:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    padding:4%;box-shadow:0 0 50px rgba(0,0,0,.7) inset;z-index:6;transition:background .25s;
+  }
+  .center-info .c-title{font-size:clamp(.85rem,2.9vw,1.2rem);font-weight:800;color:#ffdf8a;}
+  .center-info .c-sub{font-size:.66rem;color:var(--sub);margin-top:.4em;line-height:1.55;}
+  .center-info .c-stat{margin-top:.55em;font-size:clamp(.62rem,1.9vw,.8rem);color:#a8c4e6;font-family:monospace;line-height:1.6;}
+  .ring{width:100%;height:100%;overflow:visible;}
+  .cell{cursor:pointer;transition:opacity .25s;}
+  .cell:hover path{filter:brightness(1.6) saturate(1.2);}
+  .cell.dim{opacity:.12;}
+  .lbl{pointer-events:none;}
+  .kana-txt{font-weight:700;}
+  .fan-txt{font-family:monospace;font-weight:700;}
+  .controls{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;justify-content:center;}
+  button{
+    background:#1b2432;color:#e6edf3;border:1px solid #3a4759;
+    padding:8px 15px;border-radius:8px;cursor:pointer;font-size:.8rem;font-family:inherit;transition:.2s;
+  }
+  button:hover{background:#26344a;border-color:#5a7ba6;}
+  button.active{background:#2f4768;border-color:#7aa2d6;color:#fff;}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;max-width:900px;margin-top:16px;}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:.78rem;color:#c9d1d9;}
+  .dot{width:13px;height:13px;border-radius:50%;flex:none;}
+  .dot.ring{background:none;border:2px solid #ff9f45;}
+  footer{margin-top:16px;font-size:.67rem;color:var(--sub);text-align:center;max-width:880px;line-height:1.8;}
+  footer b{color:#a8c4e6;}
+</style>
+</head>
+<body>
+
+<h1>楞嚴咒咒心 × 108足 圓周落點連線</h1>
+<div class="subtitle">佛頂首楞嚴神咒 · 咒心 · 全序列落點（33 音節，一個不缺）</div>
+<div class="mantra">Oṃ anale anale viśade viśade vaira vajra-dhāri bandha bandhani vajra-pāṇi phaṭ hūṃ ṭhrūṃ phaṭ svāhā</div>
+
+<div class="stage">
+  <svg class="ring" viewBox="0 0 800 800" id="ring"></svg>
+  <div class="center-info" id="info">
+    <div class="c-title">楞嚴咒 咒心</div>
+    <div class="c-sub">全序列落點連線</div>
+    <div class="c-stat">33 音節 · 全部落點</div>
+  </div>
+</div>
+
+<div class="controls">
+  <button id="btnA" class="active">全序列落點連線</button>
+  <button id="btnB">循環鋪滿星網</button>
+  <button id="btnReset">重置</button>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<footer>
+  <b>落點規則：</b>全 33 音節皆給落點；能同音者取同音足，無相同者取<b>首音相近</b>之足（橙框標記＝近似）。<br>
+  星序：計都 ☋ → 金星 ♀ → 太陽 ☉ → 月亮 ☽ → 火星 ♂ → 羅睺 ☊ → 木星 ♃ → 土星 ♄ → 水星 ☿。
+</footer>
+
+<script>
+"use strict";
+/* ===== 資料 ===== */
+var PLANETS = {
+  "計都":{sym:"☋", color:"#8b6fb0"},
+  "金星":{sym:"♀", color:"#d4a5c9"},
+  "太陽":{sym:"☉", color:"#e8b84b"},
+  "月亮":{sym:"☽", color:"#c5cbd6"},
+  "火星":{sym:"♂", color:"#d9564a"},
+  "羅睺":{sym:"☊", color:"#4a9c86"},
+  "木星":{sym:"♃", color:"#c9a227"},
+  "土星":{sym:"♄", color:"#9a8f7a"},
+  "水星":{sym:"☿", color:"#4b9ed6"}
+};
+
+var STARS = [
+  {cn:"婁", in:"Aswini",            planet:"計都", feet:["Chu","Che","Cho","La"],   kana:["チュ","チェ","チョ","ラ"]},
+  {cn:"胃", in:"Bharani",           planet:"金星", feet:["Li","Lu","Le","Lo"],     kana:["リ","ル","レ","ロ"]},
+  {cn:"昴", in:"Krittika",          planet:"太陽", feet:["A","I","U","E"],         kana:["ア","イ","ウ","エ"]},
+  {cn:"畢", in:"Rohini",            planet:"月亮", feet:["O","Va","Vi","Vu"],     kana:["オ","ヴァ","ヴィ","ヴ"]},
+  {cn:"觜", in:"Mrigashira",        planet:"火星", feet:["Ve","Vo","Ka","Ki"],    kana:["ヴェ","ヴォ","カ","キ"]},
+  {cn:"參", in:"Ardra",             planet:"羅睺", feet:["Ku","Gha","Ng","Chha"], kana:["ク","ガー","ン","チャー"]},
+  {cn:"井", in:"Punarvasu",         planet:"木星", feet:["Ke","Ko","Ha","Hi"],    kana:["ケ","コ","ハ","ヒ"]},
+  {cn:"鬼", in:"Pushya",            planet:"土星", feet:["Hu","He","Ho","Da"],    kana:["フ","ヘ","ホ","ダ"]},
+  {cn:"柳", in:"Ashlesha",          planet:"水星", feet:["Di","Du","De","Do"],    kana:["ディ","ドゥ","デ","ド"]},
+  {cn:"星", in:"Magha",             planet:"計都", feet:["Ma","Mi","Mu","Me"],    kana:["マ","ミ","ム","メ"]},
+  {cn:"張", in:"Purva Phalguni",    planet:"金星", feet:["Mo","Ta","Ti","Tu"],    kana:["モ","タ","ティ","トゥ"]},
+  {cn:"翼", in:"Uttara Phalguni",   planet:"太陽", feet:["Te","To","Pa","Pi"],    kana:["テ","ト","パ","ピ"]},
+  {cn:"軫", in:"Hasta",             planet:"月亮", feet:["Pu","Sha","Na","Tha"],  kana:["プ","シャ","ナ","タ"]},
+  {cn:"角", in:"Chitra",            planet:"火星", feet:["Pe","Po","Ra","Ri"],    kana:["ペ","ポ","ラ","リ"]},
+  {cn:"亢", in:"Swati",             planet:"羅睺", feet:["Ru","Re","Ro","Ta"],    kana:["ル","レ","ロ","タ"]},
+  {cn:"氐", in:"Vishakha",          planet:"木星", feet:["Ti","Tu","Te","To"],    kana:["ティ","トゥ","テ","ト"]},
+  {cn:"房", in:"Anuradha",          planet:"土星", feet:["Na","Ni","Nu","Ne"],    kana:["ナ","ニ","ヌ","ネ"]},
+  {cn:"心", in:"Jyeshta",           planet:"水星", feet:["No","Ya","Yi","Yu"],    kana:["ノ","ヤ","イ","ユ"]},
+  {cn:"尾", in:"Mula",              planet:"計都", feet:["Ye","Yo","Bha","Bhi"],  kana:["エ","ヨ","バ","ビ"]},
+  {cn:"箕", in:"Purva Ashadha",     planet:"金星", feet:["Bhu","Dha","Pha","Dha"],kana:["ブ","ダ","ファ","ダ"]},
+  {cn:"斗", in:"Uttara Ashadha",    planet:"太陽", feet:["Bhe","Bho","Ja","Ji"],  kana:["ベ","ボ","ジャ","ジ"]},
+  {cn:"女", in:"Shravana",          planet:"月亮", feet:["Ju","Je","Jo","Gha"],   kana:["ジュ","ジェ","ジョ","ガ"]},
+  {cn:"虛", in:"Dhanishta",         planet:"火星", feet:["Ga","Gi","Gu","Ge"],    kana:["ガ","ギ","グ","ゲ"]},
+  {cn:"危", in:"Shatabhisha",       planet:"羅睺", feet:["Go","Sa","Si","Su"],    kana:["ゴ","サ","シ","ス"]},
+  {cn:"室", in:"Purva Bhadrapada",  planet:"木星", feet:["Se","So","Da","Di"],    kana:["セ","ソ","ダ","ディ"]},
+  {cn:"壁", in:"Uttara Bhadrapada", planet:"土星", feet:["Du","Tha","Jham","Jna"],kana:["ドゥ","サ","ニャ","ニャ"]},
+  {cn:"奎", in:"Revati",            planet:"水星", feet:["De","Do","Cha","Chi"],  kana:["デ","ド","チャ","チ"]}
+];
+
+/* ===== 幾何 ===== */
+var NS="http://www.w3.org/2000/svg";
+var svg=document.getElementById("ring");
+var CX=400, CY=400;
+var N_STAR=STARS.length, N_FOOT=4, N_CELL=N_STAR*N_FOOT; // 108
+var step=(2*Math.PI)/N_CELL;
+var START=-Math.PI/2 - step/2;
+var R_IN=150, R_OUT=356, R_BAND_IN=250, R_BAND_OUT=300, R_NAME=R_OUT+40;
+
+function pt(r,a){ return [CX+r*Math.cos(a), CY+r*Math.sin(a)]; }
+function wedge(a0,a1,rIn,rOut){
+  var p0=pt(rOut,a0), p1=pt(rOut,a1), p2=pt(rIn,a1), p3=pt(rIn,a0);
+  var large=(a1-a0)>Math.PI?1:0;
+  return "M "+p0[0]+" "+p0[1]+" A "+rOut+" "+rOut+" 0 "+large+" 1 "+p1[0]+" "+p1[1]+
+         " L "+p2[0]+" "+p2[1]+" A "+rIn+" "+rIn+" 0 "+large+" 0 "+p3[0]+" "+p3[1]+" Z";
+}
+function orientUpright(midDeg){
+  var rot=midDeg+90;
+  if(midDeg>90 && midDeg<270) rot+=180;
+  return rot;
+}
+function cellMid(gi){ return START + gi*step + step/2; }
+function cellAnchor(gi){ var a=cellMid(gi); return pt((R_IN+R_OUT)/2, a); }
+function CIDX(s,f){ return s*4+f; }
+
+/* ===== 建立 SVG 元素 ===== */
+function mk(tag,attrs){
+  var e=document.createElementNS(NS,tag);
+  for(var k in attrs){ e.setAttribute(k,attrs[k]); }
+  return e;
+}
+
+/* ===== 畫 108 格 ===== */
+var cells=[];
+var s,f,gi,a0,a1,mid,midDeg,g,p,pathD;
+
+for(s=0;s<N_STAR;s++){
+  for(f=0;f<N_FOOT;f++){
+    gi=s*N_FOOT+f;
+    a0=START+gi*step;
+    a1=a0+step;
+    mid=a0+step/2;
+    midDeg=mid*180/Math.PI;
+    var pl=PLANETS[STARS[s].planet];
+
+    g=mk("g",{class:"cell","data-i":gi,"data-s":s});
+    pathD=wedge(a0+0.001,a1-0.001,R_IN,R_OUT);
+
+    // 底
+    g.appendChild(mk("path",{d:pathD, fill:pl.color, "fill-opacity":"0.14",
+      stroke:"#0d1117","stroke-width":"0.7"}));
+    // 內圈帶（片假名）
+    g.appendChild(mk("path",{d:wedge(a0+0.001,a1-0.001,R_IN,R_BAND_IN),
+      fill:pl.color,"fill-opacity":"0.8",stroke:"#0d1117","stroke-width":"0.6"}));
+    // 中間深色腰帶
+    g.appendChild(mk("path",{d:wedge(a0+0.001,a1-0.001,R_BAND_IN,R_BAND_OUT),
+      fill:"#0f151d",stroke:"#0d1117","stroke-width":"0.5"}));
+    // 外圈帶（梵音拼音）
+    g.appendChild(mk("path",{d:wedge(a0+0.001,a1-0.001,R_BAND_OUT,R_OUT),
+      fill:pl.color,"fill-opacity":"0.8",stroke:"#0d1117","stroke-width":"0.6"}));
+
+    svg.appendChild(g);
+    cells.push(g);
+
+    // 片假名
+    var kp=pt((R_IN+R_BAND_IN)/2, mid);
+    svg.appendChild(mk("text",{class:"lbl kana-txt", x:kp[0], y:kp[1],
+      "font-size":"12.5", fill:"#0d1117","text-anchor":"middle","dominant-baseline":"middle"})).textContent=STARS[s].kana[f];
+
+    // 梵音拼音
+    var fp=pt((R_BAND_OUT+R_OUT)/2, mid);
+    svg.appendChild(mk("text",{class:"lbl fan-txt", x:fp[0], y:fp[1],
+      "font-size":"12.5", fill:"#ffffff","text-anchor":"middle","dominant-baseline":"middle"})).textContent=STARS[s].feet[f];
+  }
+}
+
+/* ===== 宿名 / 分隔線 / 九曜符號 ===== */
+for(s=0;s<N_STAR;s++){
+  var pl2=PLANETS[STARS[s].planet];
+  var ang=START+s*N_FOOT*step;
+  var e1=pt(R_IN,ang), e2=pt(R_OUT+20,ang);
+  svg.appendChild(mk("line",{x1:e1[0],y1:e1[1],x2:e2[0],y2:e2[1],stroke:"#0d1117","stroke-width":"1.7"}));
+
+  var m2=START+(s*N_FOOT+2)*step, m2deg=m2*180/Math.PI;
+  var np=pt(R_NAME,m2);
+  var tname=mk("text",{class:"lbl",x:np[0],y:np[1],"font-size":"18","font-weight":"800",
+    fill:"#ffdf8a","text-anchor":"middle","dominant-baseline":"middle",
+    transform:"rotate("+orientUpright(m2deg)+" "+np[0]+" "+np[1]+")"});
+  tname.textContent=STARS[s].cn;
+  svg.appendChild(tname);
+
+  var sp=pt(R_IN-18,m2);
+  var tsym=mk("text",{x:sp[0],y:sp[1],"font-size":"16",fill:pl2.color,
+    "text-anchor":"middle","dominant-baseline":"middle"});
+  tsym.textContent=pl2.sym;
+  svg.appendChild(tsym);
+}
+
+/* ===== 連線/標記層 ===== */
+var gLines=mk("g",{}); svg.appendChild(gLines);
+var gMarkers=mk("g",{}); svg.appendChild(gMarkers);
+
+/* ===== 楞嚴咒咒心：33 音節全落點 ===== */
+var SEG=[
+  {syl:"Oṃ",   cell:CIDX(3,0),  ap:true },
+  {syl:"a",    cell:CIDX(2,0),  ap:false},
+  {syl:"na",   cell:CIDX(12,2), ap:false},
+  {syl:"le",   cell:CIDX(1,2),  ap:false},
+  {syl:"a",    cell:CIDX(2,0),  ap:false},
+  {syl:"na",   cell:CIDX(12,2), ap:false},
+  {syl:"le",   cell:CIDX(1,2),  ap:false},
+  {syl:"vi",   cell:CIDX(3,2),  ap:false},
+  {syl:"śa",   cell:CIDX(23,1), ap:true },
+  {syl:"de",   cell:CIDX(8,2),  ap:false},
+  {syl:"vi",   cell:CIDX(3,2),  ap:false},
+  {syl:"śa",   cell:CIDX(23,1), ap:true },
+  {syl:"de",   cell:CIDX(8,2),  ap:false},
+  {syl:"vai",  cell:CIDX(3,1),  ap:true },
+  {syl:"va",   cell:CIDX(3,1),  ap:false},
+  {syl:"jra",  cell:CIDX(20,2), ap:true },
+  {syl:"dhā",  cell:CIDX(7,3),  ap:true },
+  {syl:"ri",   cell:CIDX(13,3), ap:false},
+  {syl:"ban",  cell:CIDX(20,0), ap:true },
+  {syl:"dha",  cell:CIDX(7,3),  ap:true },
+  {syl:"ban",  cell:CIDX(20,0), ap:true },
+  {syl:"dha",  cell:CIDX(7,3),  ap:true },
+  {syl:"ni",   cell:CIDX(16,1), ap:false},
+  {syl:"va",   cell:CIDX(3,1),  ap:false},
+  {syl:"jra",  cell:CIDX(20,2), ap:true },
+  {syl:"pā",   cell:CIDX(11,2), ap:false},
+  {syl:"ṇi",   cell:CIDX(16,1), ap:true },
+  {syl:"phaṭ", cell:CIDX(19,2), ap:true },
+  {syl:"hūṃ",  cell:CIDX(7,0),  ap:true },
+  {syl:"ṭhrūṃ",cell:CIDX(12,3),ap:true },
+  {syl:"phaṭ", cell:CIDX(19,2), ap:true },
+  {syl:"svā",  cell:CIDX(23,1), ap:true },
+  {syl:"hā",   cell:CIDX(6,2),  ap:true }
+];
+
+var COLORS=["#ff6b6b","#ffd93d","#6bcB77","#4d96ff","#c77dff","#ff9f45","#4dd0e1","#f06292",
+  "#aed581","#ba68c8","#4db6ac","#e57373","#fff176","#81c784","#64b5f6","#f48fb1",
+  "#ce93d8","#ffb74d","#80cbc4","#e6ee9c","#ff8a65","#9575cd","#4fc3f7","#a1887f",
+  "#dce775","#7986cb","#ffcc80","#b39ddb","#90a4ae","#ffab91","#c5e1a5","#9fa8da","#f8bbd0"];
+
+/* ===== 畫模式 A ===== */
+function drawA(){
+  while(gLines.firstChild) gLines.removeChild(gLines.firstChild);
+  while(gMarkers.firstChild) gMarkers.removeChild(gMarkers.firstChild);
+  cells.forEach(function(c){ c.classList.add("dim"); });
+
+  var pts=[];
+  for(var i=0;i<SEG.length;i++){
+    var xy=cellAnchor(SEG[i].cell);
+    pts.push({syl:SEG[i].syl, ap:SEG[i].ap, xy:xy, ang:cellMid(SEG[i].cell), cell:SEG[i].cell});
+  }
+
+  // 連線（依咒序，不閉合）
+  for(var i2=0;i2<pts.length-1;i2++){
+    gLines.appendChild(mk("line",{
+      x1:pts[i2].xy[0], y1:pts[i2].xy[1],
+      x2:pts[i2+1].xy[0], y2:pts[i2+1].xy[1],
+      stroke:"#7aa2d6","stroke-width":"1.6","stroke-opacity":"0.62"
+    }));
+  }
+
+  // 落點
+  for(var j=0;j<pts.length;j++){
+    var pj=pts[j];
+    for(var c2=0;c2<cells.length;c2++){
+      if(+cells[c2].getAttribute("data-i")===pj.cell) cells[c2].classList.remove("dim");
+    }
+    var col=COLORS[j%COLORS.length];
+
+    gMarkers.appendChild(mk("circle",{
+      cx:pj.xy[0], cy:pj.xy[1], r:"9.5", fill:col,
+      stroke: pj.ap?"#ff9f45":"#0d1117", "stroke-width": pj.ap?"2.6":"1.6"
+    }));
+
+    var tn=mk("text",{x:pj.xy[0], y:pj.xy[1],"text-anchor":"middle",
+      "dominant-baseline":"middle","font-size":"8.5","font-weight":"800",fill:"#0d1117"});
+    tn.textContent=(j+1);
+    gMarkers.appendChild(tn);
+
+    var op=pt((R_IN+R_OUT)/2+52, pj.ang);
+    var tl=mk("text",{x:op[0], y:op[1],"text-anchor":"middle","dominant-baseline":"middle",
+      "font-size":"12","font-weight":"800",fill:col});
+    tl.textContent=pj.syl;
+    gMarkers.appendChild(tl);
+  }
+
+  info.style.background="linear-gradient(160deg,#2f4768,#161b22 72%)";
+  info.innerHTML='<div class="c-title">楞嚴咒 咒心</div>'+
+    '<div class="c-sub">全序列落點連線</div>'+
+    '<div class="c-stat">33 音節<br>橙框＝近似 / 深框＝精確</div>';
+}
+
+/* ===== 畫模式 B ===== */
+function drawB(){
+  while(gLines.firstChild) gLines.removeChild(gLines.firstChild);
+  while(gMarkers.firstChild) gMarkers.removeChild(gMarkers.firstChild);
+  cells.forEach(function(c){ c.classList.remove("dim"); });
+
+  for(var i=0;i<N_CELL;i++){
+    var a=cellAnchor(i), b=cellAnchor((i+1)%N_CELL);
+    gLines.appendChild(mk("line",{
+      x1:a[0], y1:a[1], x2:b[0], y2:b[1],
+      stroke:COLORS[i%COLORS.length], "stroke-width":"1.05","stroke-opacity":"0.35"
+    }));
+  }
+  info.style.background="linear-gradient(160deg,#1e3a5f,#161b22 72%)";
+  info.innerHTML='<div class="c-title">楞嚴咒 咒心</div>'+
+    '<div class="c-sub">循環鋪滿星網</div>'+
+    '<div class="c-stat">33 音節循環<br>鋪滿 108 格</div>';
+}
+
+/* ===== 控制 ===== */
+var info=document.getElementById("info");
+var btnA=document.getElementById("btnA");
+var btnB=document.getElementById("btnB");
+var btnR=document.getElementById("btnReset");
+
+function setActive(b){
+  btnA.classList.remove("active");
+  btnB.classList.remove("active");
+  b.classList.add("active");
+}
+btnA.addEventListener("click",function(){ setActive(btnA); drawA(); });
+btnB.addEventListener("click",function(){ setActive(btnB); drawB(); });
+btnR.addEventListener("click",function(){ setActive(btnA); drawA(); });
+
+/* ===== 圖例 ===== */
+var legend=document.getElementById("legend");
+var items=[
+  {t:"連線（依咒序）", cls:"dot", bg:"#7aa2d6"},
+  {t:"橙框＝近似對應", cls:"dot ring"},
+  {t:"底色＝九曜 ☋♀☉☽♂☊♃♄☿", cls:"dot", bg:"#8b6fb0"}
+];
+for(var i=0;i<items.length;i++){
+  var d=document.createElement("div");
+  d.className="legend-item";
+  var sp=document.createElement("span");
+  sp.className=items[i].cls;
+  if(items[i].bg) sp.style.background=items[i].bg;
+  d.appendChild(sp);
+  d.appendChild(document.createTextNode(items[i].t));
+  legend.appendChild(d);
+}
+
+/* ===== 啟動 ===== */
+drawA();
+</script>
+</body>
+</html>

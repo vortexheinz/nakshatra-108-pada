@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>二十七宿・九曜・百八足 圓形圖</title>
+<style>
+  :root{
+    --bg:#faf7f0; --ink:#2b2620; --sub:#7a6f60; --line:#c9bfae; --line2:#e4dcc9; --card:#ffffff;
+    box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){--bg:#1b1812;--ink:#ece5d6;--sub:#b8ab93;--line:#4a4438;--line2:#332e26;--card:#242019;}
+  }
+  :root[data-theme="dark"]{--bg:#1b1812;--ink:#ece5d6;--sub:#b8ab93;--line:#4a4438;--line2:#332e26;--card:#242019;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px); height:100%;}
+  body{margin:0; min-height:100%; background:var(--bg); color:var(--ink); font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; display:flex; flex-direction:column; align-items:center; padding:12px 8px 24px;}
+  h1{font-size:15px; font-weight:600; color:var(--sub); margin:6px 0 2px; text-align:center;}
+  .note{font-size:11.5px; color:var(--sub); text-align:center; max-width:640px; line-height:1.6; margin-bottom:6px;}
+  .wrap{width:100%; max-width:820px; overflow-x:auto;}
+  svg{width:100%; height:auto; display:block; background:var(--card); border-radius:14px;}
+  text{fill:var(--ink);}
+  .sub{fill:var(--sub);}
+</style>
+</head>
+<body>
+<h1>二十七宿・九曜・百八足 圓形對照圖</h1>
+<div class="note">內圈：中原宿名一字＋梵音宿名＋九曜主星符號　｜　外圈：每宿四足之梵音音名（共108足）</div>
+<div class="wrap"><svg id="wheel" viewBox="0 0 900 900" xmlns="http://www.w3.org/2000/svg"></svg></div>
+
+<script>
+const DATA = [
+ ['角','Citrā','♂',['Pe','Po','Ra','Ri']],
+ ['亢','Svāti','☊',['Ru','Re','Ro','Ta']],
+ ['氐','Viśākhā','♃',['Ti','Tu','Te','To']],
+ ['房','Anurādhā','♄',['Na','Ni','Nu','Ne']],
+ ['心','Jyeṣṭhā','☿',['No','Ya','Yi','Yu']],
+ ['尾','Mūla','☋',['Ye','Yo','Bha','Bhi']],
+ ['箕','Pūrvāṣāḍhā','♀',['Bhu','Dha','Pha','Dha']],
+ ['斗','Uttarāṣāḍhā','☉',['Bhe','Bho','Ja','Ji']],
+ ['女','Śravaṇa','☽',['Ju','Je','Jo','Gha']],
+ ['虛','Dhaniṣṭhā','♂',['Ga','Gi','Gu','Ge']],
+ ['危','Śatabhiṣā','☊',['Go','Sa','Si','Su']],
+ ['室','Pūrva-Bhādrapadā','♃',['Se','So','Da','Di']],
+ ['壁','Uttara-Bhādrapadā','♄',['Du','Tha','Jha','Na']],
+ ['奎','Revatī','☿',['De','Do','Cha','Chi']],
+ ['婁','Aśvinī','☋',['Chu','Che','Cho','La']],
+ ['胃','Bharaṇī','♀',['Li','Lu','Le','Lo']],
+ ['昴','Kṛttikā','☉',['A','I','U','E']],
+ ['畢','Rohiṇī','☽',['O','Va','Vi','Vu']],
+ ['觜','Mṛgaśirā','♂',['Ve','Vo','Ka','Ki']],
+ ['參','Ārdrā','☊',['Ku','Gha','Nga','Chha']],
+ ['井','Punarvasu','♃',['Ke','Ko','Ha','Hi']],
+ ['鬼','Puṣya','♄',['Hu','He','Ho','Da']],
+ ['柳','Aśleṣā','☿',['Di','Du','De','Do']],
+ ['星','Maghā','☋',['Ma','Mi','Mu','Me']],
+ ['張','Pūrva-Phalgunī','♀',['Mo','Ta','Ti','Tu']],
+ ['翼','Uttara-Phalgunī','☉',['Te','To','Pa','Pi']],
+ ['軫','Hastā','☽',['Pu','Sha','Na','Tha']],
+];
+const COLOR = {'♂':'#e74c3c','☊':'#7d5fff','♃':'#f5a623','♄':'#5c7080','☿':'#16a085','☋':'#8d6e63','♀':'#ff5fa2','☉':'#e8b800','☽':'#4f9dff'};
+
+const NS='http://www.w3.org/2000/svg';
+const svg=document.getElementById('wheel');
+const cx=450, cy=450;
+const R0=95, R1=250, R2=250, R3=385; // inner label ring 95-250, outer pada ring 250-385
+const N=27, secAng=360/N, padAng=secAng/4;
+
+function pol(ang,r){ const rad=(ang-90)*Math.PI/180; return {x:cx+r*Math.cos(rad), y:cy+r*Math.sin(rad)}; }
+function el(tag,attrs){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
+function wedge(a0,a1,ri,ro,fill,stroke){
+  const p1=pol(a0,ri),p2=pol(a1,ri),p3=pol(a1,ro),p4=pol(a0,ro);
+  const d=`M ${p1.x} ${p1.y} A ${ri} ${ri} 0 0 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${ro} ${ro} 0 0 1 ${p4.x} ${p4.y} Z`;
+  return el('path',{d, fill, stroke, 'stroke-width':1});
+}
+function radText(str,ang,r,size,weight,color,italic){
+  const mid = ((ang%360)+360)%360;
+  let rot = mid; // baseline points outward
+  const flip = mid>90 && mid<270;
+  if(flip) rot = mid-180;
+  const p=pol(ang,r);
+  const t=el('text',{x:p.x,y:p.y,'text-anchor':'middle','dominant-baseline':'middle',
+      'font-size':size,'font-weight':weight||400, transform:`rotate(${rot} ${p.x} ${p.y})`});
+  if(color) t.setAttribute('fill',color);
+  if(italic) t.setAttribute('font-style','italic');
+  t.textContent=str;
+  return t;
+}
+
+// center circle
+svg.appendChild(el('circle',{cx,cy,r:R0-4,fill:'none',stroke:'var(--line)','stroke-width':1.2}));
+svg.appendChild(radText('二十七宿',0,R0-40,15,700,null,false));
+svg.appendChild(radText('九曜・百八足',0,R0-18,10,400,null,false));
+
+DATA.forEach((row,i)=>{
+  const [han,sox,sym,padas]=row;
+  const a0=i*secAng, a1=a0+secAng, amid=a0+secAng/2;
+  const col=COLOR[sym];
+
+  // inner identity ring
+  svg.appendChild(wedge(a0,a1,R0,R1,col+'26',col+'88'));
+  svg.appendChild(radText(han,amid,R0+30,22,700));
+  svg.appendChild(radText(sox,amid,R0+78,10.5,500,'var(--sub)',true));
+  const sp=pol(amid,R0+120);
+  const st=el('text',{x:sp.x,y:sp.y,'text-anchor':'middle','dominant-baseline':'middle','font-size':17});
+  st.setAttribute('fill',col); st.textContent=sym; svg.appendChild(st);
+
+  // outer 4-pada ring
+  for(let k=0;k<4;k++){
+    const b0=a0+k*padAng, b1=b0+padAng, bmid=b0+padAng/2;
+    svg.appendChild(wedge(b0,b1,R2,R3, k%2? col+'12':col+'22', 'var(--line2)'));
+    svg.appendChild(radText(padas[k],bmid,(R2+R3)/2,11,500));
+  }
+  // sector boundary (thicker)
+  const q0=pol(a0,R0-4), q1=pol(a0,R3);
+  svg.appendChild(el('line',{x1:q0.x,y1:q0.y,x2:q1.x,y2:q1.y,stroke:'var(--line)','stroke-width':1.3}));
+});
+
+svg.appendChild(el('circle',{cx,cy,r:R1,fill:'none',stroke:'var(--line)','stroke-width':1}));
+svg.appendChild(el('circle',{cx,cy,r:R3,fill:'none',stroke:'var(--line)','stroke-width':1.3}));
+</script>
+</body>
+</html>

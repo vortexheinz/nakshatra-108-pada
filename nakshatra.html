@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>恆星制印度占星 · 27宿圓形圖表</title>
+<style>
+  :root{
+    --bg:#0e1117; --panel:#161b24; --ink:#e8ecf1; --dim:#9aa7b8;
+    --line:#2a3240; --accent:#ffcf6b;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:radial-gradient(circle at 20% 0%,#1a2233 0%,var(--bg) 55%);
+    color:var(--ink); font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    line-height:1.7; padding:28px 16px 60px;
+  }
+  .wrap{max-width:1100px;margin:0 auto}
+  h1{font-size:clamp(1.35rem,3.4vw,2rem);text-align:center;margin:.2em 0 .1em;letter-spacing:.04em}
+  .sub{text-align:center;color:var(--dim);margin:0 0 26px;font-size:.92rem}
+  h2{font-size:1.15rem;margin:2.4em 0 .7em;padding-left:.6em;border-left:4px solid var(--accent)}
+  h3{font-size:1rem;margin:1.6em 0 .5em;color:#cfe0f5}
+
+  /* ---- wheel ---- */
+  .wheelbox{display:flex;flex-wrap:wrap;gap:26px;justify-content:center;align-items:center;
+            background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+  svg{max-width:min(560px,92vw);height:auto;touch-action:manipulation}
+  .seg{transition:opacity .15s, filter .15s;cursor:pointer}
+  .seg:hover{filter:brightness(1.35)}
+  .dimmed{opacity:.18}
+  .center-label{fill:var(--ink);font-size:13px;font-weight:600;text-anchor:middle}
+  .center-sub{fill:var(--dim);font-size:11px;text-anchor:middle}
+  .ring-num{font-size:9.5px;font-weight:700;fill:#0e1117;text-anchor:middle;pointer-events:none}
+  .ring-sym{font-size:12px;fill:#0e1117;text-anchor:middle;pointer-events:none}
+
+  /* ---- detail panel ---- */
+  .detail{flex:1 1 300px;min-width:280px;background:#10151d;border:1px solid var(--line);
+          border-radius:14px;padding:18px 20px}
+  .detail .no{color:var(--accent);font-weight:700;font-size:.85rem;letter-spacing:.1em}
+  .detail .name{font-size:1.25rem;font-weight:700;margin:.15em 0 .45em}
+  .detail table{width:100%;border-collapse:collapse;font-size:.9rem}
+  .detail td{padding:5px 0;vertical-align:top;border-bottom:1px dashed #22293380}
+  .detail td:first-child{color:var(--dim);width:7.5em;white-space:nowrap}
+  .swatch{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .hint{color:var(--dim);font-size:.85rem;text-align:center;margin-top:14px}
+
+  /* ---- tables ---- */
+  .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+  table.data{width:100%;border-collapse:collapse;font-size:.9rem;min-width:640px}
+  table.data th,table.data td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left}
+  table.data thead th{background:#1c2330;position:sticky;top:0;color:#fff;font-weight:600;white-space:nowrap}
+  table.data tbody tr:nth-child(odd){background:#141a23}
+  table.data tbody tr:hover{background:#1d2634}
+  .sym{font-size:1.15rem}
+  .note{color:var(--dim);font-size:.88rem}
+  .note ol{padding-left:1.3em}
+  .note li{margin:.35em 0}
+  footer{text-align:center;color:var(--dim);font-size:.82rem;margin-top:44px}
+  @media print{
+    body{background:#fff;color:#111}
+    .wheelbox,.detail,table.data thead th{background:#fff;color:#111;border-color:#bbb}
+    h2{border-color:#888}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>恆星制印度占星 · 二十七宿圓形圖表</h1>
+  <p class="sub">Vedic / Sidereal Nakshatra Wheel ｜ 九曜主星色環 · 中原星宿對照 · 含義速查</p>
+
+  <!-- ============ WHEEL ============ -->
+  <div class="wheelbox">
+    <svg id="wheel" viewBox="0 0 600 600" role="img"
+         aria-label="27宿圓形圖表，依九曜主星配色"></svg>
+
+    <div class="detail" id="detail">
+      <div class="no" id="dNo">—</div>
+      <div class="name" id="dName">請將滑鼠移到圓環上</div>
+      <table>
+        <tr><td>中原對應</td><td id="dCn">—</td></tr>
+        <tr><td>主管星</td><td id="dLord">—</td></tr>
+        <tr><td>符號</td><td id="dSym">—</td></tr>
+        <tr><td>含義</td><td id="dMean">將游標移到任一扇區，或點按查看細節。</td></tr>
+      </table>
+    </div>
+  </div>
+  <p class="hint">上：圓環 ＝ 27 宿（每宿 12°）；顏色 ＝ 九曜主星（每曜恰轄 3 宿）。滑鼠懸停／點按扇區以查看。</p>
+
+  <!-- ============ FULL TABLE ============ -->
+  <h2>完整對照表</h2>
+  <div class="scroll">
+    <table class="data">
+      <thead>
+        <tr><th>#</th><th>印度星宿（Nakshatra）</th><th>常見中原星宿對應</th><th>主管星（九曜）</th><th>符號</th><th>星宿含義（核心意涵）</th></tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- ============ QUICK REF ============ -->
+  <h2>快速備查（依主管星分類）</h2>
+  <div class="scroll">
+    <table class="data">
+      <thead><tr><th>主管星</th><th>符號</th><th>所轄星宿</th></tr></thead>
+      <tbody id="tbody2"></tbody>
+    </table>
+  </div>
+
+  <!-- ============ NOTES ============ -->
+  <h2>查閱前說明</h2>
+  <div class="note">
+    <ol>
+      <li><b>「主行星」有兩套容易混用的系統：</b>一套是 <b>Vimshottari Dasha 的星宿主星（Nakshatra Lord）</b>，這是占星實務最常用的；另一套是 Nakshatra 守護神／象徵。本表採前者，因指定「九曜主行星」。九曜 ＝ 日、月、火、水、木、金、土、羅睺、計都。</li>
+      <li><b>27 宿中不含「阿比吉（Abhijit）」</b>，它是第 28 宿，插入在 Uttarashadha 與 Shravana 之間；因要求 27 宿，故不收錄。</li>
+      <li><b>中原星宿對應</b>各派略有出入（兩者起算點與廣度定義不同），本表為常見對應，屬近似而非嚴格等分。</li>
+      <li><b>九曜等分：</b>27 ÷ 9 ＝ 3，每行星恰轄 3 個星宿，順序即 Vimshottari Dasha 的循環起點（Ketu→Venus→Sun→Moon→Mars→Rahu→Jupiter→Saturn→Mercury）。</li>
+      <li><b>含義欄</b>為星宿「核心象徵」。實際論命還需看守護神、Gana、Yoni、Shakti 等細部屬性，含義會更立體。</li>
+    </ol>
+  </div>
+
+  <footer>恆星制印度占星 27 宿速查 · 資料整理 · 顏色僅供辨識，不具占星權威性</footer>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const NAK = [
+ {n:"Ashwini", cn:"阿濕波尼", z:"婁宿", lord:"計都", sym:"☋", en:"Ketu",    mean:"迅捷、開創、療癒、馬首般的衝勁；象徵新生與速度"},
+ {n:"Bharani", cn:"跋羅尼",   z:"胃宿", lord:"金星", sym:"♀", en:"Venus",   mean:"承載、生育、慾望與節制；象徵創造與毀滅的雙面"},
+ {n:"Krittika",cn:"羯利底迦", z:"昴宿", lord:"太陽", sym:"☉", en:"Sun",     mean:"銳利、削減、淨化、火之意志；象徵切割與淬鍊"},
+ {n:"Rohini",  cn:"羅希尼",   z:"畢宿", lord:"月亮", sym:"☽", en:"Moon",    mean:"豐饒、美感、感官、成長；象徵孕育與魅力"},
+ {n:"Mrigashira",cn:"摩利伽尸羅", z:"觜宿", lord:"火星", sym:"♂", en:"Mars",  mean:"探索、尋覓、敏感、不安於定；象徵鹿之追尋"},
+ {n:"Ardra",   cn:"阿陀羅",   z:"參宿", lord:"羅睺", sym:"☊", en:"Rahu",    mean:"風暴、淚水、破壞後重生、洞察；象徵劇變與智慧"},
+ {n:"Punarvasu",cn:"補奈婆蘇", z:"井宿", lord:"木星", sym:"♃", en:"Jupiter", mean:"回歸、復得、豐沛與希望；象徵重生與滋養"},
+ {n:"Pushya",  cn:"布沙耶",   z:"鬼宿", lord:"土星", sym:"♄", en:"Saturn",  mean:"滋養、供養、護持與責任；象徵最吉祥的養育"},
+ {n:"Ashlesha",cn:"阿濕唎沙", z:"柳宿", lord:"水星", sym:"☿", en:"Mercury", mean:"纏繞、狡黠、洞察與束縛；象徵蛇之智慧與危險"},
+ {n:"Magha",   cn:"摩伽",     z:"星宿", lord:"計都", sym:"☋", en:"Ketu",    mean:"祖先、王權、榮耀與傳承；象徵寶座與世系"},
+ {n:"Purva Phalguni",cn:"前額伽", z:"張宿", lord:"金星", sym:"♀", en:"Venus", mean:"歡愉、享樂、創造與社交；象徵休憩與娛樂"},
+ {n:"Uttara Phalguni",cn:"後額伽", z:"翼宿", lord:"太陽", sym:"☉", en:"Sun",  mean:"恩惠、承諾、忠誠與合作；象徵契約與庇護"},
+ {n:"Hasta",   cn:"訶薩多",   z:"軫宿", lord:"月亮", sym:"☽", en:"Moon",    mean:"技藝、巧手、精明與療癒；象徵手之靈巧"},
+ {n:"Chitra",  cn:"質多羅",   z:"角宿", lord:"火星", sym:"♂", en:"Mars",    mean:"璀璨、工藝、設計與魅力；象徵寶石之光彩"},
+ {n:"Swati",   cn:"娑縛底",   z:"亢宿", lord:"羅睺", sym:"☊", en:"Rahu",    mean:"獨立、貿易、遷移與自主；象徵風中之劍"},
+ {n:"Vishakha",cn:"毘沙迦",   z:"氐宿", lord:"木星", sym:"♃", en:"Jupiter", mean:"目標、雄心、分歧與收成；象徵雷電之門"},
+ {n:"Anuradha",cn:"阿耨羅陀", z:"房宿", lord:"土星", sym:"♄", en:"Saturn",  mean:"友誼、虔誠、平衡與堅忍；象徵蓮花之根"},
+ {n:"Jyeshtha",cn:"逝瑟吒",   z:"心宿", lord:"水星", sym:"☿", en:"Mercury", mean:"長者、權柄、勇氣與獨尊；象徵耳飾與護符"},
+ {n:"Mula",    cn:"牟羅",     z:"尾宿", lord:"計都", sym:"☋", en:"Ketu",    mean:"根源、探究、拔除與解脫；象徵被縛之獅"},
+ {n:"Purva Ashadha",cn:"前阿沙陀", z:"箕宿", lord:"金星", sym:"♀", en:"Venus", mean:"不敗、宣示、淨化與熱望；象徵扇與勝利"},
+ {n:"Uttara Ashadha",cn:"後阿沙陀", z:"斗宿", lord:"太陽", sym:"☉", en:"Sun",  mean:"終極勝利、持久、正直與領導；象徵象牙"},
+ {n:"Shravana",cn:"尸羅婆那", z:"女宿", lord:"月亮", sym:"☽", en:"Moon",    mean:"聽聞、學習、連結與神啟；象徵耳與三足"},
+ {n:"Dhanishta",cn:"陀尼瑟吒", z:"虛宿", lord:"火星", sym:"♂", en:"Mars",   mean:"財富、節奏、音樂與豐盛；象徵鼓聲"},
+ {n:"Shatabhisha",cn:"設多毘舍", z:"危宿", lord:"羅睺", sym:"☊", en:"Rahu",  mean:"百醫、隱秘、孤獨與療癒；象徵空圍之圓"},
+ {n:"Purva Bhadrapada",cn:"前跋陀羅波陀", z:"室宿", lord:"木星", sym:"♃", en:"Jupiter", mean:"熱烈、焚燒、雙面與超脫；象徵前腳之椅"},
+ {n:"Uttara Bhadrapada",cn:"後跋陀羅波陀", z:"壁宿", lord:"土星", sym:"♄", en:"Saturn", mean:"深沉、冥思、穩定與慈悲；象徵後腳之蛇牀"},
+ {n:"Revati",  cn:"利婆底",   z:"奎宿", lord:"水星", sym:"☿", en:"Mercury", mean:"引導、守護、豐足與旅程終結；象徵鼓與魚"}
+];
+
+/* planet colors */
+const COLOR = {
+  "計都":"#8e7cc3","金星":"#e8b4c8","太陽":"#f2a65a","月亮":"#cfe3f5",
+  "火星":"#e06b6b","羅睺":"#7fa7c9","木星":"#f2d377","土星":"#9aa6b2","水星":"#8fd6b4"
+};
+const DARKTEXT = {"月亮":"#2a3240","木星":"#2a3240","水星":"#2a3240"};
+
+/* ---------------- BUILD WHEEL ---------------- */
+const SIZE=600, C=SIZE/2;
+const R_OUT=272, R_MID=196, R_IN=150;   // ring boundaries
+const svg=document.getElementById("wheel");
+const NS="http://www.w3.org/2000/svg";
+const N=27, STEP=360/N, GAP=0.35;       // degrees per sector, gap
+
+function pt(r,a){const rad=(a-90)*Math.PI/180;return [C+r*Math.cos(rad), C+r*Math.sin(rad)];}
+function sectorPath(r1,r2,a1,a2){
+  const [x1,y1]=pt(r1,a1),[x2,y2]=pt(r2,a1),[x3,y3]=pt(r2,a2),[x4,y4]=pt(r1,a2);
+  const large = (a2-a1)>180?1:0;
+  return `M${x1} ${y1} L${x2} ${y2} A${r2} ${r2} 0 ${large} 1 ${x3} ${y3} L${x4} ${y4} A${r1} ${r1} 0 ${large} 0 ${x1} ${y1} Z`;
+}
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);
+  for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||svg).appendChild(e);return e;}
+
+/* outer decorative ring */
+el("circle",{cx:C,cy:C,r:286,fill:"none",stroke:"#2f3a4b","stroke-width":1});
+el("circle",{cx:C,cy:C,r:R_OUT,fill:"none",stroke:"#3a465a","stroke-width":1});
+
+const segments=[];
+NAK.forEach((d,i)=>{
+  const a1=i*STEP+GAP/2, a2=(i+1)*STEP-GAP/2, mid=(a1+a2)/2;
+  const fill=COLOR[d.lord];
+  const txtColor = DARKTEXT[d.lord] || "#0e1117";
+
+  const g=el("g",{class:"seg","data-i":i,tabindex:0,role:"button",
+                  "aria-label":`${i+1}. ${d.n} ${d.cn}，主星${d.lord}`});
+
+  /* sector body */
+  const p=el("path",{d:sectorPath(R_IN,R_OUT,a1,a2),fill:fill,stroke:"#0e1117","stroke-width":1.4},g);
+  /* inner thin ring (planet band) */
+  el("path",{d:sectorPath(R_MID,R_MID+26,a1,a2),fill:fill,opacity:.55,stroke:"#0e1117","stroke-width":1},g);
+
+  /* number near inner edge */
+  const [nx,ny]=pt(R_IN+18, mid);
+  el("text",{x:nx,y:ny+3,class:"ring-num",fill:txtColor},g).textContent=i+1;
+
+  /* planet symbol in middle band */
+  const [sx,sy]=pt((R_MID+26+ (R_OUT+0))/2 - 26, mid);
+  el("text",{x:sx,y:sy+4,class:"ring-sym",fill:txtColor},g).textContent=d.sym;
+
+  /* nakshatra short name (rotated) */
+  const [tx,ty]=pt((R_IN+ (R_MID))/2+6, mid);
+  const rot = mid; // place name along radius
+  const t=el("text",{x:tx,y:ty+3,"text-anchor":"middle","font-size":"10.5",
+                     fill:txtColor,"font-weight":"600","pointer-events":"none",
+                     transform:`rotate(${rot} ${tx} ${ty})`},g);
+  t.textContent=d.cn;
+
+  segments.push(g);
+});
+
+/* center circle */
+el("circle",{cx:C,cy:C,r:R_IN-14,fill:"#10151d",stroke:"#2f3a4b","stroke-width":1});
+el("text",{x:C,y:C-6,class:"center-label"}).textContent="27 宿";
+el("text",{x:C,y:C+14,class:"center-sub"}).textContent="Nakshatra Wheel";
+
+/* ---------------- INTERACTION ---------------- */
+const detail={no:document.getElementById("dNo"),name:document.getElementById("dName"),
+  cn:document.getElementById("dCn"),lord:document.getElementById("dLord"),
+  sym:document.getElementById("dSym"),mean:document.getElementById("dMean")};
+
+function show(i){
+  const d=NAK[i];
+  detail.no.textContent=`#${i+1} / 27`;
+  detail.name.textContent=`${d.n}　${d.cn}`;
+  detail.cn.textContent=d.z;
+  detail.lord.innerHTML=`<span class="swatch" style="background:${COLOR[d.lord]}"></span>${d.lord} ${d.en}`;
+  detail.sym.innerHTML=`<span class="sym">${d.sym}</span>`;
+  detail.mean.textContent=d.mean;
+  segments.forEach((s,j)=>s.classList.toggle("dimmed", j!==i));
+}
+function clear(){
+  segments.forEach(s=>s.classList.remove("dimmed"));
+  detail.no.textContent="—";
+  detail.name.textContent="請將滑鼠移到圓環上";
+  detail.cn.textContent=detail.lord.textContent=detail.sym.textContent="—";
+  detail.mean.textContent="將游標移到任一扇區，或點按查看細節。";
+}
+segments.forEach((g,i)=>{
+  g.addEventListener("mouseenter",()=>show(i));
+  g.addEventListener("focus",()=>show(i));
+  g.addEventListener("click",()=>show(i));
+  g.addEventListener("touchstart",()=>show(i),{passive:true});
+});
+svg.addEventListener("mouseleave",clear);
+
+/* ---------------- TABLES ---------------- */
+const tb=document.getElementById("tbody");
+NAK.forEach((d,i)=>{
+  const tr=document.createElement("tr");
+  tr.innerHTML=`<td>${i+1}</td><td><b>${d.n}</b><br><span class="note">${d.cn}</span></td>
+    <td>${d.z}</td>
+    <td><span class="swatch" style="background:${COLOR[d.lord]}"></span>${d.lord}</td>
+    <td class="sym">${d.sym}</td><td>${d.mean}</td>`;
+  tr.addEventListener("mouseenter",()=>show(i));
+  tr.addEventListener("mouseleave",clear);
+  tb.appendChild(tr);
+});
+
+const order=["計都","金星","太陽","月亮","火星","羅睺","木星","土星","水星"];
+const en={"計都":"Ketu","金星":"Venus","太陽":"Sun","月亮":"Moon","火星":"Mars",
+          "羅睺":"Rahu","木星":"Jupiter","土星":"Saturn","水星":"Mercury"};
+const tb2=document.getElementById("tbody2");
+order.forEach(lord=>{
+  const list=NAK.filter(d=>d.lord===lord).map(d=>d.cn).join("、");
+  const sym=NAK.find(d=>d.lord===lord).sym;
+  const tr=document.createElement("tr");
+  tr.innerHTML=`<td><span class="swatch" style="background:${COLOR[lord]}"></span><b>${lord}</b> ${en[lord]}</td>
+                <td class="sym">${sym}</td><td>${list}</td>`;
+  tb2.appendChild(tr);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>恆星制占星．27宿九曜對應輪 v2</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --ink: #eae6da;
+    --muted: #9a9488;
+    --line: #2a2e38;
+    --accent: #d4af37;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(ellipse at 50% 0%, #1c2029 0%, var(--bg) 60%);
+    color: var(--ink);
+    font-family: "Noto Serif TC", "PMingLiU", "Songti TC", serif;
+    padding: 32px 16px 64px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.7rem;
+    letter-spacing: 0.12em;
+    margin: 0 0 4px;
+    color: var(--accent);
+  }
+  .sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+    letter-spacing: 0.05em;
+  }
+  .wheel-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 16px;
+  }
+  svg { width: 100%; height: auto; display: block; }
+  .center-label {
+    fill: var(--accent);
+    text-anchor: middle;
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+  .center-sub {
+    fill: var(--muted);
+    text-anchor: middle;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  path {
+    cursor: default;
+    transition: opacity 0.15s ease, filter 0.15s ease;
+  }
+  path:hover {
+    opacity: 1 !important;
+    filter: drop-shadow(0 0 6px rgba(212,175,55,0.7));
+  }
+  .legend {
+    max-width: 780px;
+    margin: 28px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .legend span.dot, td span.dot {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: -1px;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  table {
+    max-width: 900px;
+    margin: 40px auto 0;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.92rem;
+  }
+  caption {
+    text-align: left;
+    color: var(--accent);
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    letter-spacing: 0.08em;
+  }
+  th, td {
+    border-bottom: 1px solid var(--line);
+    padding: 8px 10px;
+    text-align: left;
+  }
+  th {
+    color: var(--accent);
+    font-weight: normal;
+    letter-spacing: 0.05em;
+  }
+  td.skt {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+  tr:hover td { background: rgba(212,175,55,0.06); }
+  .note {
+    max-width: 900px;
+    margin: 20px auto 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+  footer {
+    text-align: center;
+    color: #565b66;
+    font-size: 0.75rem;
+    margin-top: 40px;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+  <h1>恆星制占星．27宿九曜對應輪</h1>
+  <div class="sub">中原二十八宿（略牛宿，取首字）× 梵語二十七宿（Nakṣatra）× 九曜主星</div>
+
+  <div class="wheel-wrap">
+    <svg viewBox="0 0 760 760" xmlns="http://www.w3.org/2000/svg">
+<path d="M 380 110 A 270 270 0 0 1 442.26628510045884 117.27788494344753 L 403.061587074244 282.6955129420176 A 100 100 0 0 0 380 280 Z" fill="#e74c3c" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="397.14" y="233.40" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♂</text>
+<text x="402.66" y="186.12" transform="rotate(6.67 402.66 186.12)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">角</text>
+<text x="415.41" y="77.06" transform="rotate(6.67 415.41 77.06)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Citrā</text>
+<path d="M 442.26628510045884 117.27788494344753 A 270 270 0 0 1 501.1757786541248 138.71918711267872 L 424.8799180200462 290.63673596765875 A 100 100 0 0 0 403.061587074244 282.6955129420176 Z" fill="#8e44ad" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="430.48" y="241.30" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☊</text>
+<text x="446.76" y="196.57" transform="rotate(20.00 446.76 196.57)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">亢</text>
+<text x="484.32" y="93.39" transform="rotate(20.00 484.32 93.39)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Svātī</text>
+<path d="M 501.1757786541248 138.71918711267872 A 270 270 0 0 1 553.5526546153657 173.16800035787594 L 444.27876096865396 303.3955556881022 A 100 100 0 0 0 424.8799180200462 290.63673596765875 Z" fill="#e67e22" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="461.11" y="256.68" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♃</text>
+<text x="487.26" y="216.91" transform="rotate(33.33 487.26 216.91)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">氐</text>
+<text x="547.60" y="125.18" transform="rotate(33.33 547.60 125.18)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Viśākhā</text>
+<path d="M 553.5526546153657 173.16800035787594 A 270 270 0 0 1 596.5732620438619 218.76718024024774 L 460.2123192755044 320.28414082972137 A 100 100 0 0 0 444.27876096865396 303.3955556881022 Z" fill="#34495e" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="487.36" y="278.71" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♄</text>
+<text x="521.98" y="246.05" transform="rotate(46.67 521.98 246.05)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">房</text>
+<text x="601.85" y="170.70" transform="rotate(46.67 601.85 170.70)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Anurādhā</text>
+<path d="M 596.5732620438619 218.76718024024774 A 270 270 0 0 1 627.918348857674 273.0584631694277 L 471.8216106880274 340.3920233960843 A 100 100 0 0 0 460.2123192755044 320.28414082972137 Z" fill="#2ecc71" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="507.83" y="306.20" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☿</text>
+<text x="549.05" y="282.40" transform="rotate(60.00 549.05 282.40)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">心</text>
+<text x="644.14" y="227.50" transform="rotate(60.00 644.14 227.50)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Jyeṣṭhā</text>
+<path d="M 627.918348857674 273.0584631694277 A 270 270 0 0 1 645.8980933132962 333.1149920299288 L 478.4807753012208 362.635182233307 A 100 100 0 0 0 471.8216106880274 340.3920233960843 Z" fill="#795548" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="521.40" y="337.67" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☋</text>
+<text x="567.00" y="324.02" transform="rotate(73.33 567.00 324.02)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">尾</text>
+<text x="672.19" y="292.53" transform="rotate(73.33 672.19 292.53)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Mūla</text>
+<path d="M 645.8980933132962 333.1149920299288 A 270 270 0 0 1 649.5432027332424 395.69910380582843 L 479.8308158271268 385.8144828910476 A 100 100 0 0 0 478.4807753012208 362.635182233307 Z" fill="#f48fb1" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="527.35" y="371.42" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♀</text>
+<text x="574.87" y="368.65" transform="rotate(86.67 574.87 368.65)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">箕</text>
+<text x="684.48" y="362.27" transform="rotate(86.67 684.48 362.27)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Pūrva Āṣāḍhā</text>
+<path d="M 649.5432027332424 395.69910380582854 A 270 270 0 0 1 638.657168325182 457.4368728319944 L 475.79895123154887 408.68032327110905 A 100 100 0 0 0 479.8308158271268 385.8144828910476 Z" fill="#f1c40f" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="525.36" y="405.63" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☉</text>
+<text x="572.23" y="413.90" transform="rotate(-80.00 572.23 413.90)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">斗</text>
+<text x="680.37" y="432.96" transform="rotate(-80.00 680.37 432.96)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Uttara Āṣāḍhā</text>
+<path d="M 638.657168325182 457.4368728319944 A 270 270 0 0 1 613.8268590217984 515 L 466.6025403784439 430 A 100 100 0 0 0 475.79895123154887 408.68032327110905 Z" fill="#bdc3c7" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="515.53" y="438.46" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☽</text>
+<text x="559.24" y="457.31" transform="rotate(-66.67 559.24 457.31)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">女</text>
+<text x="660.06" y="500.80" transform="rotate(-66.67 660.06 500.80)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Śravaṇa</text>
+<path d="M 613.8268590217984 515 A 270 270 0 0 1 576.3908832247231 565.285242224558 L 452.73736415730485 448.6241637868734 A 100 100 0 0 0 466.6025403784439 430 Z" fill="#e74c3c" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="498.39" y="468.14" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♂</text>
+<text x="536.57" y="496.57" transform="rotate(-53.33 536.57 496.57)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">虛</text>
+<text x="624.65" y="562.13" transform="rotate(-53.33 624.65 562.13)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Dhaniṣṭhā</text>
+<path d="M 576.3908832247231 565.285242224558 A 270 270 0 0 1 528.3674240791175 605.5817090814928 L 434.9508978070806 463.54878114129366 A 100 100 0 0 0 452.73736415730485 448.6241637868734 Z" fill="#8e44ad" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="474.88" y="493.07" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☊</text>
+<text x="505.47" y="529.53" transform="rotate(-40.00 505.47 529.53)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">危</text>
+<text x="576.05" y="613.64" transform="rotate(-40.00 576.05 613.64)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Śatabhiṣā</text>
+<path d="M 528.3674240791175 605.5817090814928 A 270 270 0 0 1 472.34543869793043 633.7170076121953 L 414.2020143325668 473.9692620785909 A 100 100 0 0 0 434.9508978070806 463.54878114129366 Z" fill="#e67e22" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="446.24" y="511.90" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♃</text>
+<text x="467.61" y="554.44" transform="rotate(-26.67 467.61 554.44)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">室</text>
+<text x="516.88" y="652.56" transform="rotate(-26.67 516.88 652.56)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Pūrva Bhādrapadā</text>
+<path d="M 472.3454386979306 633.7170076121952 A 270 270 0 0 1 411.34508681381215 648.1743565903246 L 391.609291412523 479.3238357741943 A 100 100 0 0 0 414.2020143325669 473.9692620785908 Z" fill="#34495e" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="414.04" y="523.62" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♄</text>
+<text x="425.02" y="569.94" transform="rotate(-13.33 425.02 569.94)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">壁</text>
+<text x="450.34" y="676.78" transform="rotate(-13.33 450.34 676.78)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Uttara Bhādrapadā</text>
+<path d="M 411.34508681381215 648.1743565903246 A 270 270 0 0 1 348.65491318618774 648.1743565903246 L 368.3907085874769 479.3238357741943 A 100 100 0 0 0 391.609291412523 479.3238357741943 Z" fill="#2ecc71" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="380.00" y="527.60" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☿</text>
+<text x="380.00" y="575.20" transform="rotate(0.00 380.00 575.20)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">奎</text>
+<text x="380.00" y="685.00" transform="rotate(0.00 380.00 685.00)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Revatī</text>
+<path d="M 348.65491318618774 648.1743565903246 A 270 270 0 0 1 287.65456130206934 633.7170076121952 L 345.79798566743307 473.9692620785908 A 100 100 0 0 0 368.3907085874769 479.3238357741943 Z" fill="#795548" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="345.96" y="523.62" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☋</text>
+<text x="334.98" y="569.94" transform="rotate(13.33 334.98 569.94)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">婁</text>
+<text x="309.66" y="676.78" transform="rotate(13.33 309.66 676.78)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Aśvinī</text>
+<path d="M 287.65456130206945 633.7170076121953 A 270 270 0 0 1 231.63257592088237 605.5817090814928 L 325.0491021929194 463.5487811412936 A 100 100 0 0 0 345.7979856674331 473.9692620785909 Z" fill="#f48fb1" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="313.76" y="511.90" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♀</text>
+<text x="292.39" y="554.44" transform="rotate(26.67 292.39 554.44)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">胃</text>
+<text x="243.12" y="652.56" transform="rotate(26.67 243.12 652.56)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Bharaṇī</text>
+<path d="M 231.63257592088237 605.5817090814928 A 270 270 0 0 1 183.60911677527676 565.285242224558 L 307.2626358426951 448.62416378687334 A 100 100 0 0 0 325.0491021929194 463.5487811412936 Z" fill="#f1c40f" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="285.12" y="493.07" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☉</text>
+<text x="254.53" y="529.53" transform="rotate(40.00 254.53 529.53)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">昴</text>
+<text x="183.95" y="613.64" transform="rotate(40.00 183.95 613.64)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Kṛttikā</text>
+<path d="M 183.60911677527676 565.285242224558 A 270 270 0 0 1 146.1731409782015 514.9999999999999 L 293.3974596215561 429.99999999999994 A 100 100 0 0 0 307.2626358426951 448.62416378687334 Z" fill="#bdc3c7" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="261.61" y="468.14" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☽</text>
+<text x="223.43" y="496.57" transform="rotate(53.33 223.43 496.57)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">畢</text>
+<text x="135.35" y="562.13" transform="rotate(53.33 135.35 562.13)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Rohiṇī</text>
+<path d="M 146.17314097820156 515 A 270 270 0 0 1 121.342831674818 457.4368728319944 L 284.20104876845113 408.68032327110905 A 100 100 0 0 0 293.3974596215561 430 Z" fill="#e74c3c" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="244.47" y="438.46" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♂</text>
+<text x="200.76" y="457.31" transform="rotate(66.67 200.76 457.31)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">觜</text>
+<text x="99.94" y="500.80" transform="rotate(66.67 99.94 500.80)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Mṛgaśira</text>
+<path d="M 121.342831674818 457.4368728319944 A 270 270 0 0 1 110.45679726675758 395.69910380582843 L 280.1691841728732 385.8144828910476 A 100 100 0 0 0 284.20104876845113 408.68032327110905 Z" fill="#8e44ad" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="234.64" y="405.63" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☊</text>
+<text x="187.77" y="413.90" transform="rotate(80.00 187.77 413.90)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">參</text>
+<text x="79.63" y="432.96" transform="rotate(80.00 79.63 432.96)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Ārdrā</text>
+<path d="M 110.45679726675758 395.69910380582843 A 270 270 0 0 1 114.10190668670384 333.11499202992877 L 281.5192246987792 362.635182233307 A 100 100 0 0 0 280.1691841728732 385.8144828910476 Z" fill="#e67e22" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="232.65" y="371.42" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♃</text>
+<text x="185.13" y="368.65" transform="rotate(273.33 185.13 368.65)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">井</text>
+<text x="75.52" y="362.27" transform="rotate(273.33 75.52 362.27)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Punarvasu</text>
+<path d="M 114.10190668670384 333.11499202992877 A 270 270 0 0 1 132.081651142326 273.05846316942774 L 288.1783893119726 340.39202339608437 A 100 100 0 0 0 281.5192246987792 362.635182233307 Z" fill="#34495e" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="238.60" y="337.67" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♄</text>
+<text x="193.00" y="324.02" transform="rotate(286.67 193.00 324.02)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">鬼</text>
+<text x="87.81" y="292.53" transform="rotate(286.67 87.81 292.53)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Puṣya</text>
+<path d="M 132.08165114232608 273.0584631694275 A 270 270 0 0 1 163.4267379561382 218.7671802402477 L 299.78768072449566 320.28414082972137 A 100 100 0 0 0 288.17838931197264 340.39202339608426 Z" fill="#2ecc71" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="252.17" y="306.20" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☿</text>
+<text x="210.95" y="282.40" transform="rotate(300.00 210.95 282.40)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">柳</text>
+<text x="115.86" y="227.50" transform="rotate(300.00 115.86 227.50)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Āśleṣā</text>
+<path d="M 163.4267379561382 218.7671802402477 A 270 270 0 0 1 206.44734538463433 173.16800035787597 L 315.72123903134604 303.3955556881022 A 100 100 0 0 0 299.78768072449566 320.28414082972137 Z" fill="#795548" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="272.64" y="278.71" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☋</text>
+<text x="238.02" y="246.05" transform="rotate(313.33 238.02 246.05)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">星</text>
+<text x="158.15" y="170.70" transform="rotate(313.33 158.15 170.70)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Maghā</text>
+<path d="M 206.44734538463433 173.16800035787597 A 270 270 0 0 1 258.8242213458752 138.71918711267872 L 335.12008197995374 290.63673596765875 A 100 100 0 0 0 315.72123903134604 303.3955556881022 Z" fill="#f48fb1" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="298.89" y="256.68" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">♀</text>
+<text x="272.74" y="216.91" transform="rotate(326.67 272.74 216.91)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">張</text>
+<text x="212.40" y="125.18" transform="rotate(326.67 212.40 125.18)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Pūrva Phalgunī</text>
+<path d="M 258.82422134587534 138.71918711267864 A 270 270 0 0 1 317.7337148995413 117.27788494344753 L 356.93841292575604 282.6955129420176 A 100 100 0 0 0 335.12008197995385 290.63673596765875 Z" fill="#f1c40f" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="329.52" y="241.30" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☉</text>
+<text x="313.24" y="196.57" transform="rotate(340.00 313.24 196.57)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">翼</text>
+<text x="275.68" y="93.39" transform="rotate(340.00 275.68 93.39)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Uttara Phalgunī</text>
+<path d="M 317.7337148995413 117.27788494344753 A 270 270 0 0 1 379.99999999999994 110 L 380 280 A 100 100 0 0 0 356.93841292575604 282.6955129420176 Z" fill="#bdc3c7" stroke="#1b1b1b" stroke-width="0.6" opacity="0.88"></path>
+<text x="362.86" y="233.40" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#111">☽</text>
+<text x="357.34" y="186.12" transform="rotate(353.33 357.34 186.12)" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="600" fill="#fff">軫</text>
+<text x="344.59" y="77.06" transform="rotate(353.33 344.59 77.06)" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#f0ead6" textLength="58.2" lengthAdjust="spacingAndGlyphs">Hasta</text>
+
+      <circle cx="380" cy="380" r="100" fill="#0f1115" stroke="#2a2e38" stroke-width="1.5"></circle>
+      <text x="380" y="372" class="center-label">恆星制占星</text>
+      <text x="380" y="396" class="center-sub">27宿・九曜輪</text>
+    </svg>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot" style="background:#f1c40f"></span>日曜 ☉ Sun</span>
+    <span><span class="dot" style="background:#bdc3c7"></span>月曜 ☽ Moon</span>
+    <span><span class="dot" style="background:#e74c3c"></span>火曜 ♂ Mars</span>
+    <span><span class="dot" style="background:#2ecc71"></span>水曜 ☿ Mercury</span>
+    <span><span class="dot" style="background:#e67e22"></span>木曜 ♃ Jupiter</span>
+    <span><span class="dot" style="background:#f48fb1"></span>金曜 ♀ Venus</span>
+    <span><span class="dot" style="background:#34495e"></span>土曜 ♄ Saturn</span>
+    <span><span class="dot" style="background:#8e44ad"></span>羅睺 ☊ Rahu</span>
+    <span><span class="dot" style="background:#795548"></span>計都 ☋ Ketu</span>
+  </div>
+
+  <table>
+    <caption>27宿星宿名（對應中原星宿名）｜代表九曜主行星｜宿義</caption>
+    <thead>
+      <tr><th>27宿星宿名</th><th>梵語宿名</th><th>主曜（符號）</th><th>宿義</th></tr>
+    </thead>
+    <tbody>
+<tr><td>角宿</td><td class="skt">Citrā</td><td><span class="dot" style="background:#e74c3c"></span>火曜　♂</td><td>創造、光彩、技藝與幻象</td></tr>
+<tr><td>亢宿</td><td class="skt">Svātī</td><td><span class="dot" style="background:#8e44ad"></span>羅睺　☊</td><td>獨立善變，如風中嫩枝</td></tr>
+<tr><td>氐宿</td><td class="skt">Viśākhā</td><td><span class="dot" style="background:#e67e22"></span>木曜　♃</td><td>目標決心，開創之門</td></tr>
+<tr><td>房宿</td><td class="skt">Anurādhā</td><td><span class="dot" style="background:#34495e"></span>土曜　♄</td><td>友誼虔誠，循序成功</td></tr>
+<tr><td>心宿</td><td class="skt">Jyeṣṭhā</td><td><span class="dot" style="background:#2ecc71"></span>水曜　☿</td><td>權威年長，庇護保護</td></tr>
+<tr><td>尾宿</td><td class="skt">Mūla</td><td><span class="dot" style="background:#795548"></span>計都　☋</td><td>根源破壞，破而後立</td></tr>
+<tr><td>箕宿</td><td class="skt">Pūrva Āṣāḍhā</td><td><span class="dot" style="background:#f48fb1"></span>金曜　♀</td><td>早期勝利，淨化宣揚</td></tr>
+<tr><td>斗宿</td><td class="skt">Uttara Āṣāḍhā</td><td><span class="dot" style="background:#f1c40f"></span>日曜　☉</td><td>究竟勝利，堅忍不拔</td></tr>
+<tr><td>女宿</td><td class="skt">Śravaṇa</td><td><span class="dot" style="background:#bdc3c7"></span>月曜　☽</td><td>聆聽學習，連結傳承</td></tr>
+<tr><td>虛宿</td><td class="skt">Dhaniṣṭhā</td><td><span class="dot" style="background:#e74c3c"></span>火曜　♂</td><td>財富音律，節奏鼓動</td></tr>
+<tr><td>危宿</td><td class="skt">Śatabhiṣā</td><td><span class="dot" style="background:#8e44ad"></span>羅睺　☊</td><td>療癒奧秘，百星環繞</td></tr>
+<tr><td>室宿</td><td class="skt">Pūrva Bhādrapadā</td><td><span class="dot" style="background:#e67e22"></span>木曜　♃</td><td>轉化熱切，雙面之相</td></tr>
+<tr><td>壁宿</td><td class="skt">Uttara Bhādrapadā</td><td><span class="dot" style="background:#34495e"></span>土曜　♄</td><td>深沉智慧，靈性潛藏</td></tr>
+<tr><td>奎宿</td><td class="skt">Revatī</td><td><span class="dot" style="background:#2ecc71"></span>水曜　☿</td><td>富足圓滿，引渡終點</td></tr>
+<tr><td>婁宿</td><td class="skt">Aśvinī</td><td><span class="dot" style="background:#795548"></span>計都　☋</td><td>迅疾療癒，起始新生</td></tr>
+<tr><td>胃宿</td><td class="skt">Bharaṇī</td><td><span class="dot" style="background:#f48fb1"></span>金曜　♀</td><td>承載滋養，生死輪轉</td></tr>
+<tr><td>昴宿</td><td class="skt">Kṛttikā</td><td><span class="dot" style="background:#f1c40f"></span>日曜　☉</td><td>淨化切割，焚燒鍛鍊</td></tr>
+<tr><td>畢宿</td><td class="skt">Rohiṇī</td><td><span class="dot" style="background:#bdc3c7"></span>月曜　☽</td><td>成長豐饒，美感滋長</td></tr>
+<tr><td>觜宿</td><td class="skt">Mṛgaśira</td><td><span class="dot" style="background:#e74c3c"></span>火曜　♂</td><td>尋覓探索，好奇追尋</td></tr>
+<tr><td>參宿</td><td class="skt">Ārdrā</td><td><span class="dot" style="background:#8e44ad"></span>羅睺　☊</td><td>風暴淚水，破壞後更新</td></tr>
+<tr><td>井宿</td><td class="skt">Punarvasu</td><td><span class="dot" style="background:#e67e22"></span>木曜　♃</td><td>回歸更新，光明重現</td></tr>
+<tr><td>鬼宿</td><td class="skt">Puṣya</td><td><span class="dot" style="background:#34495e"></span>土曜　♄</td><td>滋養繁盛，至吉之宿</td></tr>
+<tr><td>柳宿</td><td class="skt">Āśleṣā</td><td><span class="dot" style="background:#2ecc71"></span>水曜　☿</td><td>纏繞魅惑，靈蛇智巧</td></tr>
+<tr><td>星宿</td><td class="skt">Maghā</td><td><span class="dot" style="background:#795548"></span>計都　☋</td><td>尊貴祖靈，王座傳承</td></tr>
+<tr><td>張宿</td><td class="skt">Pūrva Phalgunī</td><td><span class="dot" style="background:#f48fb1"></span>金曜　♀</td><td>享樂創造，繁衍歡愉</td></tr>
+<tr><td>翼宿</td><td class="skt">Uttara Phalgunī</td><td><span class="dot" style="background:#f1c40f"></span>日曜　☉</td><td>契約夥伴，庇蔭扶持</td></tr>
+<tr><td>軫宿</td><td class="skt">Hasta</td><td><span class="dot" style="background:#bdc3c7"></span>月曜　☽</td><td>巧手技藝，療癒之手</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    輪盤自12點鐘方向（角宿）順時針排列，依中原二十八宿傳統次序（略牛宿）成27宿；內圈為九曜符號，中圈為宿名首字，外圈為梵語宿名——三者皆採切線方向書寫（較原本沿半徑逐字堆疊轉了90度），並將梵語字串壓縮至各自弧長內，避免相鄰宿名擠疊。九曜依「計都→金曜→日曜→月曜→火曜→羅睺→木曜→土曜→水曜」規律循環，每9宿一輪，三輪對應27宿。
+  </div>
+
+  <footer>皮薩諾60數字周期與納音計算・27宿恆星制占星九曜對應</footer>
+
+</body>
+</html>

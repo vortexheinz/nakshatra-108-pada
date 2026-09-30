@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>27宿恆星制占星九曜108足圖表</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Noto+Serif+TC:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background-color: #07090e;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Mystic Glassmorphism */
+        .mystic-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .mystic-card-glow {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.4);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.8);
+        }
+
+        /* Golden Text Glow */
+        .text-gold-glow {
+            text-shadow: 0 0 8px rgba(234, 179, 8, 0.5);
+        }
+
+        /* Starry background animation */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Pulsing Glow Effect for active wheel segments */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.3; }
+        }
+        .pulse-light {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col justify-between text-slate-100 selection:bg-amber-500 selection:text-slate-900">
+
+    <canvas id="starfield"></canvas>
+
+    <!-- Header Section -->
+    <header class="relative z-10 border-b border-amber-500/20 bg-slate-950/80 backdrop-blur-md px-4 py-4 lg:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full border border-amber-400/50 flex items-center justify-center bg-amber-500/10 text-amber-300 text-xl shadow-[0_0_15px_rgba(212,175,55,0.3)]">
+                    <i class="fa-solid fa-dharmachakra animate-spin-slow"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wider text-amber-200">27宿恆星制占星九曜108足對照表</h1>
+                    <p class="text-xs text-amber-400/70 tracking-widest cinzel">VEDIC NAKSHATRA & NAVAGRAHA 108 PADA MANDALA</p>
+                </div>
+            </div>
+
+            <!-- Global Search & View Controls -->
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                <div class="relative flex-1 md:w-64">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-amber-400/60 text-sm"></i>
+                    <input type="text" id="searchInput" placeholder="搜尋星宿、九曜、音名或片假名..." 
+                           class="w-full bg-slate-900/90 border border-amber-500/30 rounded-full pl-9 pr-4 py-1.5 text-xs text-amber-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all">
+                </div>
+                
+                <div class="flex items-center bg-slate-900/80 border border-amber-500/30 rounded-full p-1">
+                    <button id="viewWheelBtn" class="px-3 py-1 rounded-full text-xs font-medium bg-amber-500 text-slate-950 shadow transition-all">
+                        <i class="fa-solid fa-circle-notch mr-1"></i>曼陀羅輪盤
+                    </button>
+                    <button id="viewGridBtn" class="px-3 py-1 rounded-full text-xs font-medium text-amber-300 hover:text-amber-100 transition-all">
+                        <i class="fa-solid fa-table-cells mr-1"></i>表格清單
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 py-6 w-full flex-grow flex flex-col gap-6">
+
+        <!-- WHEEL VIEW CONTAINER -->
+        <div id="wheelContainer" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left/Center: Interactive Canvas Mandala -->
+            <div class="lg:col-span-8 mystic-card rounded-2xl p-4 flex flex-col items-center justify-center relative overflow-hidden min-h-[520px]">
+                <div class="absolute top-4 left-4 z-20 flex items-center gap-2 text-xs text-amber-300/80 bg-slate-900/80 px-3 py-1.5 rounded-full border border-amber-500/20">
+                    <i class="fa-solid fa-hand-pointer text-amber-400"></i>
+                    <span>點擊或懸停扇區檢視細節</span>
+                </div>
+
+                <div class="absolute top-4 right-4 z-20 flex items-center gap-2">
+                    <button id="resetRotBtn" class="bg-slate-900/80 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 p-2 rounded-full text-xs transition" title="重設角度">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                </div>
+
+                <!-- Canvas Circle Wheel -->
+                <div class="relative w-full aspect-square max-w-[580px] flex items-center justify-center my-2">
+                    <canvas id="mandalaCanvas" class="w-full h-full cursor-pointer"></canvas>
+                </div>
+
+                <!-- Color Legend for Planets -->
+                <div id="planetLegend" class="w-full flex flex-wrap justify-center items-center gap-2 md:gap-4 pt-3 border-t border-amber-500/20 text-xs">
+                    <!-- Dynamic legend items injected here -->
+                </div>
+            </div>
+
+            <!-- Right: Detailed Inspection Panel -->
+            <div class="lg:col-span-4 flex flex-col gap-4">
+                
+                <!-- Detail Card -->
+                <div class="mystic-card mystic-card-glow rounded-2xl p-5 border-amber-500/40 relative overflow-hidden">
+                    <div class="flex items-center justify-between border-b border-amber-500/20 pb-3 mb-4">
+                        <span class="text-xs uppercase tracking-widest text-amber-400/80 cinzel">ASTROLOGICAL DETAIL</span>
+                        <span id="detailDegree" class="text-xs font-mono bg-amber-500/10 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-500/20">00°00' - 13°20'</span>
+                    </div>
+
+                    <!-- Header Star Name -->
+                    <div class="flex items-baseline justify-between mb-4">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 id="detailNakshatraZh" class="text-2xl font-bold text-amber-200 text-gold-glow">婁宿</h2>
+                                <span id="detailNakshatraIndex" class="text-xs text-amber-400/60 font-mono">(第 1 宿)</span>
+                            </div>
+                            <p id="detailNakshatraEn" class="text-xs text-slate-400 cinzel font-semibold tracking-wider">Aswini / 騎馬主宿</p>
+                        </div>
+                        <div id="detailPlanetBadge" class="flex flex-col items-end">
+                            <!-- Planet symbol & name badge -->
+                        </div>
+                    </div>
+
+                    <!-- Pada Cards Grid (4 Padas) -->
+                    <div class="mb-4">
+                        <h3 class="text-xs font-semibold text-slate-400 mb-2 flex items-center justify-between">
+                            <span>四足梵音 (108 足對應)</span>
+                            <span class="text-[10px] text-amber-400/60">每足 3°20'</span>
+                        </h3>
+                        <div id="padaCardsGrid" class="grid grid-cols-2 gap-2">
+                            <!-- 4 Padas dynamically generated -->
+                        </div>
+                    </div>
+
+                    <!-- Extra Info Box -->
+                    <div class="bg-slate-950/60 rounded-xl p-3.5 border border-amber-500/15 space-y-2 text-xs">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                            <span class="text-slate-400">主星九曜：</span>
+                            <span id="detailPlanetFull" class="text-amber-200 font-semibold">計都 (Ketu ☋)</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                            <span class="text-slate-400">目前選取足數：</span>
+                            <span id="detailSelectedPada" class="text-amber-300 font-bold">第 1 足 (Chu / チュ)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400">足黃道區間：</span>
+                            <span id="detailPadaDegree" class="text-amber-300 font-mono">00°00' - 03°20'</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Nakshatra Selector Carousel/List -->
+                <div class="mystic-card rounded-2xl p-4 border-amber-500/20">
+                    <h3 class="text-xs font-semibold text-amber-300 mb-2.5 flex items-center justify-between">
+                        <span>快速星宿選單 (27 宿)</span>
+                        <i class="fa-solid fa-list-ol text-slate-500"></i>
+                    </h3>
+                    <div id="quickNakshatraList" class="flex flex-col gap-1 max-h-[220px] overflow-y-auto pr-1">
+                        <!-- Quick selector buttons injected here -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- GRID / TABLE VIEW CONTAINER (Hidden by default) -->
+        <div id="gridContainer" class="mystic-card rounded-2xl p-4 md:p-6 border-amber-500/30 hidden">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4 pb-3 border-b border-amber-500/20">
+                <div>
+                    <h2 class="text-lg font-bold text-amber-200">27宿與108足完整梵音清單表</h2>
+                    <p class="text-xs text-slate-400">包含星宿名稱、對應九曜主星與符號、108足梵音及片假名對照</p>
+                </div>
+                <div class="text-xs text-amber-400/80 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/20">
+                    每4足組成1星宿，全天共 27 宿 108 足
+                </div>
+            </div>
+
+            <!-- Search Filter Result Info -->
+            <div id="tableSearchResultInfo" class="hidden text-xs text-amber-300 mb-3 bg-amber-950/40 p-2 rounded border border-amber-500/30"></div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="border-b border-amber-500/30 bg-slate-950/80 text-amber-300 uppercase tracking-wider font-semibold">
+                            <th class="py-3 px-3">#</th>
+                            <th class="py-3 px-3">星宿名稱 (梵名)</th>
+                            <th class="py-3 px-3">九曜主星 (符號)</th>
+                            <th class="py-3 px-3">第一足 (1st Pada)</th>
+                            <th class="py-3 px-3">第二足 (2nd Pada)</th>
+                            <th class="py-3 px-3">第三足 (3rd Pada)</th>
+                            <th class="py-3 px-3">第四足 (4th Pada)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="nakshatraTableBody" class="divide-y divide-slate-800/80">
+                        <!-- Dynamic table rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-amber-500/20 bg-slate-950/90 py-4 px-4 text-center text-xs text-slate-500">
+        <p class="text-amber-400/70">27宿恆星制占星九曜108足曼陀羅系統 &copy; 恆星占星密教宿曜道對照</p>
+    </footer>
+
+    <script>
+        // --- DATASET: 27 Nakshatras & 108 Padas ---
+        const NAKSHATRA_DATA = [
+            { id: 1, name: "婁宿", sanskrit: "Aswini", planet: "計都", planetEn: "Ketu", symbol: "☋", color: "#a855f7", padas: [
+                { num: 1, sound: "Chu", kana: "チュ" },
+                { num: 2, sound: "Che", kana: "チェ" },
+                { num: 3, sound: "Cho", kana: "チョ" },
+                { num: 4, sound: "La", kana: "ラ" }
+            ]},
+            { id: 2, name: "胃宿", sanskrit: "Bharani", planet: "金星", planetEn: "Venus", symbol: "♀", color: "#ec4899", padas: [
+                { num: 1, sound: "Li", kana: "リ" },
+                { num: 2, sound: "Lu", kana: "ル" },
+                { num: 3, sound: "Le", kana: "レ" },
+                { num: 4, sound: "Lo", kana: "ロ" }
+            ]},
+            { id: 3, name: "昴宿", sanskrit: "Krittika", planet: "太陽", planetEn: "Sun", symbol: "☉", color: "#eab308", padas: [
+                { num: 1, sound: "A", kana: "ア" },
+                { num: 2, sound: "I", kana: "イ" },
+                { num: 3, sound: "U", kana: "ウ" },
+                { num: 4, sound: "E", kana: "エ" }
+            ]},
+            { id: 4, name: "畢宿", sanskrit: "Rohini", planet: "太陰", planetEn: "Moon", symbol: "☽", color: "#38bdf8", padas: [
+                { num: 1, sound: "O", kana: "オ" },
+                { num: 2, sound: "Va", kana: "ヴァ" },
+                { num: 3, sound: "Vi", kana: "ヴィ" },
+                { num: 4, sound: "Vu", kana: "ヴ" }
+            ]},
+            { id: 5, name: "觜宿", sanskrit: "Mrigashira", planet: "火星", planetEn: "Mars", symbol: "♂", color: "#ef4444", padas: [
+                { num: 1, sound: "Ve", kana: "ヴェ" },
+                { num: 2, sound: "Vo", kana: "ヴォ" },
+                { num: 3, sound: "Ka", kana: "カ" },
+                { num: 4, sound: "Ki", kana: "キ" }
+            ]},
+            { id: 6, name: "參宿", sanskrit: "Ardra", planet: "羅睺", planetEn: "Rahu", symbol: "☊", color: "#10b981", padas: [
+                { num: 1, sound: "Ku", kana: "ク" },
+                { num: 2, sound: "Gha", kana: "ガー" },
+                { num: 3, sound: "Ng", kana: "ン" },
+                { num: 4, sound: "Chha", kana: "チャー" }
+            ]},
+            { id: 7, name: "井宿", sanskrit: "Punarvasu", planet: "木星", planetEn: "Jupiter", symbol: "♃", color: "#f97316", padas: [
+                { num: 1, sound: "Ke", kana: "ケ" },
+                { num: 2, sound: "Ko", kana: "コ" },
+                { num: 3, sound: "Ha", kana: "ハ" },
+                { num: 4, sound: "Hi", kana: "ヒ" }
+            ]},
+            { id: 8, name: "鬼宿", sanskrit: "Pushya", planet: "土星", planetEn: "Saturn", symbol: "♄", color: "#64748b", padas: [
+                { num: 1, sound: "Hu", kana: "フ" },
+                { num: 2, sound: "He", kana: "ヘ" },
+                { num: 3, sound: "Ho", kana: "ホ" },
+                { num: 4, sound: "Da", kana: "ダ" }
+            ]},
+            { id: 9, name: "柳宿", sanskrit: "Ashlesha", planet: "水星", planetEn: "Mercury", symbol: "☿", color: "#14b8a6", padas: [
+                { num: 1, sound: "Di", kana: "ディ" },
+                { num: 2, sound: "Du", kana: "ドゥ" },
+                { num: 3, sound: "De", kana: "デ" },
+                { num: 4, sound: "Do", kana: "ド" }
+            ]},
+            { id: 10, name: "星宿", sanskrit: "Magha", planet: "計都", planetEn: "Ketu", symbol: "☋", color: "#a855f7", padas: [
+                { num: 1, sound: "Ma", kana: "マ" },
+                { num: 2, sound: "Mi", kana: "ミ" },
+                { num: 3, sound: "Mu", kana: "ム" },
+                { num: 4, sound: "Me", kana: "メ" }
+            ]},
+            { id: 11, name: "張宿", sanskrit: "Purva Phalguni", planet: "金星", planetEn: "Venus", symbol: "♀", color: "#ec4899", padas: [
+                { num: 1, sound: "Mo", kana: "モ" },
+                { num: 2, sound: "Ta", kana: "タ" },
+                { num: 3, sound: "Ti", kana: "ティ" },
+                { num: 4, sound: "Tu", kana: "トゥ" }
+            ]},
+            { id: 12, name: "翼宿", sanskrit: "Uttara Phalguni", planet: "太陽", planetEn: "Sun", symbol: "☉", color: "#eab308", padas: [
+                { num: 1, sound: "Te", kana: "テ" },
+                { num: 2, sound: "To", kana: "ト" },
+                { num: 3, sound: "Pa", kana: "パ" },
+                { num: 4, sound: "Pi", kana: "ピ" }
+            ]},
+            { id: 13, name: "軫宿", sanskrit: "Hasta", planet: "太陰", planetEn: "Moon", symbol: "☽", color: "#38bdf8", padas: [
+                { num: 1, sound: "Pu", kana: "プ" },
+                { num: 2, sound: "Sha", kana: "シャ" },
+                { num: 3, sound: "Na", kana: "ナ" },
+                { num: 4, sound: "Tha", kana: "タ" }
+            ]},
+            { id: 14, name: "角宿", sanskrit: "Chitra", planet: "火星", planetEn: "Mars", symbol: "♂", color: "#ef4444", padas: [
+                { num: 1, sound: "Pe", kana: "ペ" },
+                { num: 2, sound: "Po", kana: "ポ" },
+                { num: 3, sound: "Ra", kana: "ラ" },
+                { num: 4, sound: "Ri", kana: "リ" }
+            ]},
+            { id: 15, name: "亢宿", sanskrit: "Swati", planet: "羅睺", planetEn: "Rahu", symbol: "☊", color: "#10b981", padas: [
+                { num: 1, sound: "Ru", kana: "ル" },
+                { num: 2, sound: "Re", kana: "レ" },
+                { num: 3, sound: "Ro", kana: "ロ" },
+                { num: 4, sound: "Ta", kana: "タ" }
+            ]},
+            { id: 16, name: "氐宿", sanskrit: "Vishakha", planet: "木星", planetEn: "Jupiter", symbol: "♃", color: "#f97316", padas: [
+                { num: 1, sound: "Ti", kana: "ティ" },
+                { num: 2, sound: "Tu", kana: "トゥ" },
+                { num: 3, sound: "Te", kana: "テ" },
+                { num: 4, sound: "To", kana: "ト" }
+            ]},
+            { id: 17, name: "房宿", sanskrit: "Anuradha", planet: "土星", planetEn: "Saturn", symbol: "♄", color: "#64748b", padas: [
+                { num: 1, sound: "Na", kana: "ナ" },
+                { num: 2, sound: "Ni", kana: "ニ" },
+                { num: 3, sound: "Nu", kana: "ヌ" },
+                { num: 4, sound: "Ne", kana: "ネ" }
+            ]},
+            { id: 18, name: "心宿", sanskrit: "Jyeshta", planet: "水星", planetEn: "Mercury", symbol: "☿", color: "#14b8a6", padas: [
+                { num: 1, sound: "No", kana: "ノ" },
+                { num: 2, sound: "Ya", kana: "ヤ" },
+                { num: 3, sound: "Yi", kana: "イ" },
+                { num: 4, sound: "Yu", kana: "ユ" }
+            ]},
+            { id: 19, name: "尾宿", sanskrit: "Mula", planet: "計都", planetEn: "Ketu", symbol: "☋", color: "#a855f7", padas: [
+                { num: 1, sound: "Ye", kana: "エ" },
+                { num: 2, sound: "Yo", kana: "ヨ" },
+                { num: 3, sound: "Bha", kana: "バ" },
+                { num: 4, sound: "Bhi", kana: "ビ" }
+            ]},
+            { id: 20, name: "箕宿", sanskrit: "Purva Ashadha", planet: "金星", planetEn: "Venus", symbol: "♀", color: "#ec4899", padas: [
+                { num: 1, sound: "Bhu", kana: "ブ" },
+                { num: 2, sound: "Dha", kana: "ダ" },
+                { num: 3, sound: "Pha", kana: "ファ" },
+                { num: 4, sound: "Dha", kana: "ダ" }
+            ]},
+            { id: 21, name: "斗宿", sanskrit: "Uttara Ashadha", planet: "太陽", planetEn: "Sun", symbol: "☉", color: "#eab308", padas: [
+                { num: 1, sound: "Bhe", kana: "ベ" },
+                { num: 2, sound: "Bho", kana: "ボ" },
+                { num: 3, sound: "Ja", kana: "ジャ" },
+                { num: 4, sound: "Ji", kana: "ジ" }
+            ]},
+            { id: 22, name: "女宿", sanskrit: "Shravana", planet: "太陰", planetEn: "Moon", symbol: "☽", color: "#38bdf8", padas: [
+                { num: 1, sound: "Ju", kana: "ジュ" },
+                { num: 2, sound: "Je", kana: "ジェ" },
+                { num: 3, sound: "Jo", kana: "ジョ" },
+                { num: 4, sound: "Gha", kana: "ガ" }
+            ]},
+            { id: 23, name: "虛宿", sanskrit: "Dhanishta", planet: "火星", planetEn: "Mars", symbol: "♂", color: "#ef4444", padas: [
+                { num: 1, sound: "Ga", kana: "ガ" },
+                { num: 2, sound: "Gi", kana: "ギ" },
+                { num: 3, sound: "Gu", kana: "グ" },
+                { num: 4, sound: "Ge", kana: "ゲ" }
+            ]},
+            { id: 24, name: "危宿", sanskrit: "Shatabhisha", planet: "羅睺", planetEn: "Rahu", symbol: "☊", color: "#10b981", padas: [
+                { num: 1, sound: "Go", kana: "ゴ" },
+                { num: 2, sound: "Sa", kana: "サ" },
+                { num: 3, sound: "Si", kana: "シ" },
+                { num: 4, sound: "Su", kana: "ス" }
+            ]},
+            { id: 25, name: "室宿", sanskrit: "Purva Bhadrapada", planet: "木星", planetEn: "Jupiter", symbol: "♃", color: "#f97316", padas: [
+                { num: 1, sound: "Se", kana: "セ" },
+                { num: 2, sound: "So", kana: "ソ" },
+                { num: 3, sound: "Da", kana: "ダ" },
+                { num: 4, sound: "Di", kana: "ディ" }
+            ]},
+            { id: 26, name: "壁宿", sanskrit: "Uttara Bhadrapada", planet: "土星", planetEn: "Saturn", symbol: "♄", color: "#64748b", padas: [
+                { num: 1, sound: "Du", kana: "ドゥ" },
+                { num: 2, sound: "Tha", kana: "サ" },
+                { num: 3, sound: "Jham", kana: "ニャ" },
+                { num: 4, sound: "Jna", kana: "ニャ" }
+            ]},
+            { id: 27, name: "奎宿", sanskrit: "Revati", planet: "水星", planetEn: "Mercury", symbol: "☿", color: "#14b8a6", padas: [
+                { num: 1, sound: "De", kana: "デ" },
+                { num: 2, sound: "Do", kana: "ド" },
+                { num: 3, sound: "Cha", kana: "チャ" },
+                { num: 4, sound: "Chi", kana: "チ" }
+            ]}
+        ];
+
+        // PLANET META INFORMATION
+        const PLANET_META = [
+            { name: "計都", en: "Ketu", symbol: "☋", color: "#a855f7" },
+            { name: "金星", en: "Venus", symbol: "♀", color: "#ec4899" },
+            { name: "太陽", en: "Sun", symbol: "☉", color: "#eab308" },
+            { name: "太陰", en: "Moon", symbol: "☽", color: "#38bdf8" },
+            { name: "火星", en: "Mars", symbol: "♂", color: "#ef4444" },
+            { name: "羅睺", en: "Rahu", symbol: "☊", color: "#10b981" },
+            { name: "木星", en: "Jupiter", symbol: "♃", color: "#f97316" },
+            { name: "土星", en: "Saturn", symbol: "♄", color: "#64748b" },
+            { name: "水星", en: "Mercury", symbol: "☿", color: "#14b8a6" }
+        ];
+
+        // GLOBAL APPLICATION STATE
+        let selectedNakshatraIndex = 0; // 0-26
+        let selectedPadaIndex = 0;      // 0-3
+        let rotationAngle = -Math.PI / 2; // Initial offset (婁宿 top)
+        let isHovered = false;
+        let hoverIndex = -1;
+        let hoverPadaIndex = -1;
+
+        // --- STARFIELD BACKGROUND ---
+        function initStarfield() {
+            const canvas = document.getElementById('starfield');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                stars = [];
+                for(let i=0; i<150; i++) {
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        radius: Math.random() * 1.5,
+                        alpha: Math.random(),
+                        speed: Math.random() * 0.005 + 0.002
+                    });
+                }
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(star => {
+                    star.alpha += star.speed;
+                    if(star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(234, 179, 8, ${Math.abs(star.alpha) * 0.6})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+            draw();
+        }
+
+        // --- CANVAS MANDALA WHEEL DRAWING ---
+        const canvas = document.getElementById('mandalaCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function setupCanvasPixelRatio() {
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+        }
+
+        function drawMandala() {
+            const rect = canvas.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const maxRadius = Math.min(centerX, centerY) - 10;
+
+            ctx.clearRect(0, 0, width, height);
+
+            if (maxRadius <= 0) return;
+
+            // Rings dimensions (from inner to outer)
+            const rCenter = maxRadius * 0.22;   // Center Mandala Hub
+            const rPada = maxRadius * 0.58;     // Inner Ring: 108 Padas
+            const rGraha = maxRadius * 0.76;    // Middle Ring: 9 Grahas
+            const rNakshatra = maxRadius * 0.98;// Outer Ring: 27 Nakshatras
+
+            const nakshatraAngle = (Math.PI * 2) / 27;
+            const padaAngle = (Math.PI * 2) / 108;
+
+            // 1. Draw Outer Ring (27 Nakshatras)
+            for (let i = 0; i < 27; i++) {
+                const nak = NAKSHATRA_DATA[i];
+                const startAngle = rotationAngle + i * nakshatraAngle;
+                const endAngle = startAngle + nakshatraAngle;
+                const isSelected = (i === selectedNakshatraIndex);
+                const isHover = (i === hoverIndex);
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, rNakshatra, startAngle, endAngle);
+                ctx.arc(centerX, centerY, rGraha, endAngle, startAngle, true);
+                ctx.closePath();
+
+                // Style Sector
+                if (isSelected) {
+                    ctx.fillStyle = nak.color + '66'; // Highlight selected
+                    ctx.strokeStyle = '#fef08a';
+                    ctx.lineWidth = 2.5;
+                } else if (isHover) {
+                    ctx.fillStyle = nak.color + '44';
+                    ctx.strokeStyle = '#fde047';
+                    ctx.lineWidth = 1.5;
+                } else {
+                    ctx.fillStyle = (i % 2 === 0) ? 'rgba(15, 23, 42, 0.85)' : 'rgba(30, 41, 59, 0.85)';
+                    ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+                    ctx.lineWidth = 1;
+                }
+                ctx.fill();
+                ctx.stroke();
+
+                // Outer Text (Nakshatra Name)
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                const midAngle = startAngle + nakshatraAngle / 2;
+                const textR = (rGraha + rNakshatra) / 2;
+                const textX = Math.cos(midAngle) * textR;
+                const textY = Math.sin(midAngle) * textR;
+                ctx.translate(textX, textY);
+                ctx.rotate(midAngle + Math.PI / 2);
+
+                ctx.fillStyle = isSelected ? '#ffffff' : '#fef08a';
+                ctx.font = `bold ${Math.max(10, Math.floor(width / 45))}px "Noto Serif TC", serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(nak.name, 0, 0);
+                ctx.restore();
+            }
+
+            // 2. Draw Middle Ring (9 Grahas / Associated Planets)
+            for (let i = 0; i < 27; i++) {
+                const nak = NAKSHATRA_DATA[i];
+                const startAngle = rotationAngle + i * nakshatraAngle;
+                const endAngle = startAngle + nakshatraAngle;
+                const isSelected = (i === selectedNakshatraIndex);
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, rGraha, startAngle, endAngle);
+                ctx.arc(centerX, centerY, rPada, endAngle, startAngle, true);
+                ctx.closePath();
+
+                ctx.fillStyle = nak.color + (isSelected ? '55' : '22');
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.25)';
+                ctx.lineWidth = 1;
+                ctx.fill();
+                ctx.stroke();
+
+                // Planet Symbol
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                const midAngle = startAngle + nakshatraAngle / 2;
+                const textR = (rPada + rGraha) / 2;
+                const textX = Math.cos(midAngle) * textR;
+                const textY = Math.sin(midAngle) * textR;
+                ctx.translate(textX, textY);
+
+                ctx.fillStyle = nak.color;
+                ctx.font = `${Math.max(11, Math.floor(width / 40))}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(`${nak.symbol}`, 0, 0);
+                ctx.restore();
+            }
+
+            // 3. Draw Inner Ring (108 Padas)
+            for (let i = 0; i < 108; i++) {
+                const nakIndex = Math.floor(i / 4);
+                const padaInNak = i % 4;
+                const nak = NAKSHATRA_DATA[nakIndex];
+                const pada = nak.padas[padaInNak];
+
+                const startAngle = rotationAngle + i * padaAngle;
+                const endAngle = startAngle + padaAngle;
+
+                const isSelectedNak = (nakIndex === selectedNakshatraIndex);
+                const isSelectedPada = (isSelectedNak && padaInNak === selectedPadaIndex);
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, rPada, startAngle, endAngle);
+                ctx.arc(centerX, centerY, rCenter, endAngle, startAngle, true);
+                ctx.closePath();
+
+                if (isSelectedPada) {
+                    ctx.fillStyle = '#eab308'; // Active Pada
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1.5;
+                } else if (isSelectedNak) {
+                    ctx.fillStyle = nak.color + '44';
+                    ctx.strokeStyle = 'rgba(250, 204, 21, 0.5)';
+                    ctx.lineWidth = 1;
+                } else {
+                    ctx.fillStyle = (i % 2 === 0) ? 'rgba(15, 23, 42, 0.6)' : 'rgba(30, 41, 59, 0.6)';
+                    ctx.strokeStyle = 'rgba(212, 175, 55, 0.15)';
+                    ctx.lineWidth = 0.5;
+                }
+                ctx.fill();
+                ctx.stroke();
+
+                // Pada Katakana / Sound Text
+                if (width > 350) {
+                    ctx.save();
+                    ctx.translate(centerX, centerY);
+                    const midAngle = startAngle + padaAngle / 2;
+                    const textR = (rCenter + rPada) / 2;
+                    const textX = Math.cos(midAngle) * textR;
+                    const textY = Math.sin(midAngle) * textR;
+                    ctx.translate(textX, textY);
+                    ctx.rotate(midAngle + Math.PI / 2);
+
+                    ctx.fillStyle = isSelectedPada ? '#0f172a' : (isSelectedNak ? '#fef08a' : '#cbd5e1');
+                    ctx.font = `${Math.max(8, Math.floor(width / 65))}px sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(pada.kana, 0, 0);
+                    ctx.restore();
+                }
+            }
+
+            // 4. Center Hub Graphic
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, rCenter, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(7, 9, 14, 0.95)';
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.6)';
+            ctx.lineWidth = 2;
+            ctx.fill();
+            ctx.stroke();
+
+            // Center Text
+            const currNak = NAKSHATRA_DATA[selectedNakshatraIndex];
+            ctx.fillStyle = currNak.color;
+            ctx.font = `bold ${Math.max(14, Math.floor(width / 32))}px "Noto Serif TC", serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(currNak.name, centerX, centerY - 8);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = `${Math.max(9, Math.floor(width / 50))}px sans-serif`;
+            ctx.fillText(`${currNak.sanskrit}`, centerX, centerY + 10);
+        }
+
+        // --- INTERACTION HANDLING ON CANVAS ---
+        function handleCanvasClick(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            const distance = Math.sqrt(x * x + y * y);
+            const maxRadius = Math.min(rect.width, rect.height) / 2 - 10;
+
+            if (distance < maxRadius * 0.22 || distance > maxRadius * 0.98) return;
+
+            let angle = Math.atan2(y, x) - rotationAngle;
+            while (angle < 0) angle += Math.PI * 2;
+            while (angle >= Math.PI * 2) angle -= Math.PI * 2;
+
+            // Determine Nakshatra or Pada click
+            const nakshatraAngle = (Math.PI * 2) / 27;
+            const nakIndex = Math.floor(angle / nakshatraAngle) % 27;
+
+            const padaAngle = (Math.PI * 2) / 108;
+            const globalPadaIndex = Math.floor(angle / padaAngle) % 108;
+            const padaInNak = globalPadaIndex % 4;
+
+            selectNakshatraAndPada(nakIndex, padaInNak);
+        }
+
+        function handleCanvasMouseMove(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            const distance = Math.sqrt(x * x + y * y);
+            const maxRadius = Math.min(rect.width, rect.height) / 2 - 10;
+
+            if (distance >= maxRadius * 0.22 && distance <= maxRadius * 0.98) {
+                let angle = Math.atan2(y, x) - rotationAngle;
+                while (angle < 0) angle += Math.PI * 2;
+                while (angle >= Math.PI * 2) angle -= Math.PI * 2;
+
+                const nakshatraAngle = (Math.PI * 2) / 27;
+                hoverIndex = Math.floor(angle / nakshatraAngle) % 27;
+                canvas.style.cursor = 'pointer';
+            } else {
+                hoverIndex = -1;
+                canvas.style.cursor = 'default';
+            }
+            drawMandala();
+        }
+
+        // SELECT SATELLITE / NAKSHATRA LOGIC
+        function selectNakshatraAndPada(nakIndex, padaIndex = 0) {
+            selectedNakshatraIndex = nakIndex;
+            selectedPadaIndex = padaIndex;
+            updateInspectionPanel();
+            updateQuickListHighlight();
+            drawMandala();
+        }
+
+        // --- UI UPDATE FUNCTIONS ---
+        function updateInspectionPanel() {
+            const nak = NAKSHATRA_DATA[selectedNakshatraIndex];
+            const pada = nak.padas[selectedPadaIndex];
+
+            // Degree calculation
+            const nakDegreeStart = (selectedNakshatraIndex * 13.3333).toFixed(2);
+            const nakDegreeEnd = ((selectedNakshatraIndex + 1) * 13.3333).toFixed(2);
+            
+            const padaDegreeStart = (selectedNakshatraIndex * 13.3333 + selectedPadaIndex * 3.3333).toFixed(2);
+            const padaDegreeEnd = (selectedNakshatraIndex * 13.3333 + (selectedPadaIndex + 1) * 3.3333).toFixed(2);
+
+            document.getElementById('detailNakshatraZh').textContent = nak.name;
+            document.getElementById('detailNakshatraIndex').textContent = `(第 ${nak.id} 宿)`;
+            document.getElementById('detailNakshatraEn').textContent = `${nak.sanskrit} / 星宿`;
+            document.getElementById('detailDegree').textContent = `${formatDegree(nakDegreeStart)} - ${formatDegree(nakDegreeEnd)}`;
+
+            // Planet Badge
+            const planetBadge = document.getElementById('detailPlanetBadge');
+            planetBadge.innerHTML = `
+                <div class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold shadow-inner" style="background-color: ${nak.color}22; color: ${nak.color}; border: 1px solid ${nak.color}66;">
+                    <span class="text-sm">${nak.symbol}</span>
+                    <span>${nak.planet}</span>
+                </div>
+            `;
+
+            document.getElementById('detailPlanetFull').textContent = `${nak.planet} (${nak.planetEn} ${nak.symbol})`;
+            document.getElementById('detailPlanetFull').style.color = nak.color;
+            document.getElementById('detailSelectedPada').textContent = `第 ${selectedPadaIndex + 1} 足 (${pada.sound} / ${pada.kana})`;
+            document.getElementById('detailPadaDegree').textContent = `${formatDegree(padaDegreeStart)} - ${formatDegree(padaDegreeEnd)}`;
+
+            // Render 4 Pada Cards
+            const grid = document.getElementById('padaCardsGrid');
+            grid.innerHTML = '';
+            nak.padas.forEach((p, idx) => {
+                const isActive = (idx === selectedPadaIndex);
+                const card = document.createElement('div');
+                card.className = `p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                    isActive 
+                    ? 'bg-amber-500/20 border-amber-400 text-amber-200 shadow-[0_0_10px_rgba(234,179,8,0.2)]' 
+                    : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:border-amber-500/40'
+                }`;
+                card.onclick = () => selectNakshatraAndPada(selectedNakshatraIndex, idx);
+                card.innerHTML = `
+                    <div class="text-[10px] text-slate-400 font-mono mb-0.5">PADA ${p.num}</div>
+                    <div class="text-sm font-bold text-amber-300">${p.sound}</div>
+                    <div class="text-xs text-slate-300">${p.kana}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function formatDegree(deg) {
+            const d = Math.floor(deg);
+            const m = Math.round((deg - d) * 60);
+            return `${String(d).padStart(2, '0')}°${String(m).padStart(2, '0')}'`;
+        }
+
+        // POPULATE PLANET LEGEND
+        function initPlanetLegend() {
+            const legend = document.getElementById('planetLegend');
+            legend.innerHTML = '';
+            PLANET_META.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border border-slate-800 bg-slate-950/60';
+                item.innerHTML = `
+                    <span style="color: ${p.color};">${p.symbol}</span>
+                    <span class="text-slate-300">${p.name}</span>
+                `;
+                legend.appendChild(item);
+            });
+        }
+
+        // QUICK SELECTOR LIST
+        function initQuickNakshatraList() {
+            const list = document.getElementById('quickNakshatraList');
+            list.innerHTML = '';
+            NAKSHATRA_DATA.forEach((nak, idx) => {
+                const item = document.createElement('button');
+                item.id = `quick-nak-${idx}`;
+                item.className = `flex items-center justify-between w-full px-3 py-1.5 rounded-lg text-xs transition border text-left`;
+                item.onclick = () => selectNakshatraAndPada(idx, 0);
+                item.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="font-mono text-[10px] text-slate-500">${String(nak.id).padStart(2, '0')}</span>
+                        <span class="font-semibold text-slate-200">${nak.name}</span>
+                        <span class="text-[10px] text-slate-400 cinzel">${nak.sanskrit}</span>
+                    </div>
+                    <span class="text-xs" style="color: ${nak.color};">${nak.symbol} ${nak.planet}</span>
+                `;
+                list.appendChild(item);
+            });
+            updateQuickListHighlight();
+        }
+
+        function updateQuickListHighlight() {
+            NAKSHATRA_DATA.forEach((_, idx) => {
+                const btn = document.getElementById(`quick-nak-${idx}`);
+                if (btn) {
+                    if (idx === selectedNakshatraIndex) {
+                        btn.className = 'flex items-center justify-between w-full px-3 py-1.5 rounded-lg text-xs transition border text-left bg-amber-500/20 border-amber-500/50 text-amber-200 shadow-sm';
+                    } else {
+                        btn.className = 'flex items-center justify-between w-full px-3 py-1.5 rounded-lg text-xs transition border text-left bg-slate-900/40 border-slate-800/80 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200';
+                    }
+                }
+            });
+        }
+
+        // POPULATE TABLE VIEW
+        function initTableView() {
+            const tbody = document.getElementById('nakshatraTableBody');
+            tbody.innerHTML = '';
+
+            NAKSHATRA_DATA.forEach(nak => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-amber-500/10 transition-colors border-b border-slate-800/60';
+                
+                let padasHtml = '';
+                nak.padas.forEach(p => {
+                    padasHtml += `
+                        <td class="py-2.5 px-3">
+                            <span class="font-medium text-amber-300">${p.sound}</span>
+                            <span class="text-slate-400 text-[11px] ml-1">(${p.kana})</span>
+                        </td>
+                    `;
+                });
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 font-mono text-slate-500">${nak.id}</td>
+                    <td class="py-2.5 px-3 font-bold text-amber-200">
+                        ${nak.name} 
+                        <span class="block text-[10px] text-slate-400 font-normal cinzel">${nak.sanskrit}</span>
+                    </td>
+                    <td class="py-2.5 px-3 font-medium" style="color:${nak.color}">
+                        ${nak.symbol} ${nak.planet}
+                    </td>
+                    ${padasHtml}
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // SEARCH FUNCTIONALITY
+        function handleSearch(query) {
+            const q = query.trim().toLowerCase();
+            const resultInfo = document.getElementById('tableSearchResultInfo');
+
+            if (!q) {
+                initTableView();
+                resultInfo.classList.add('hidden');
+                return;
+            }
+
+            const filtered = NAKSHATRA_DATA.filter(nak => {
+                const matchName = nak.name.includes(q);
+                const matchSanskrit = nak.sanskrit.toLowerCase().includes(q);
+                const matchPlanet = nak.planet.includes(q) || nak.planetEn.toLowerCase().includes(q);
+                const matchPada = nak.padas.some(p => p.sound.toLowerCase().includes(q) || p.kana.includes(q));
+                return matchName || matchSanskrit || matchPlanet || matchPada;
+            });
+
+            // Update Table
+            const tbody = document.getElementById('nakshatraTableBody');
+            tbody.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-500">查無與「${q}」相符的星宿或音名</td></tr>`;
+            } else {
+                filtered.forEach(nak => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-amber-500/10 transition-colors border-b border-slate-800/60';
+                    
+                    let padasHtml = '';
+                    nak.padas.forEach(p => {
+                        const hit = p.sound.toLowerCase().includes(q) || p.kana.includes(q);
+                        padasHtml += `
+                            <td class="py-2.5 px-3 ${hit ? 'bg-amber-500/20 rounded' : ''}">
+                                <span class="font-medium text-amber-300">${p.sound}</span>
+                                <span class="text-slate-400 text-[11px] ml-1">(${p.kana})</span>
+                            </td>
+                        `;
+                    });
+
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3 font-mono text-slate-500">${nak.id}</td>
+                        <td class="py-2.5 px-3 font-bold text-amber-200">
+                            ${nak.name} 
+                            <span class="block text-[10px] text-slate-400 font-normal cinzel">${nak.sanskrit}</span>
+                        </td>
+                        <td class="py-2.5 px-3 font-medium" style="color:${nak.color}">
+                            ${nak.symbol} ${nak.planet}
+                        </td>
+                        ${padasHtml}
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            resultInfo.textContent = `搜尋結果：找到 ${filtered.length} 項相符星宿`;
+            resultInfo.classList.remove('hidden');
+
+            // If wheel view, auto-select first search result
+            if (filtered.length > 0) {
+                const firstResultIndex = NAKSHATRA_DATA.findIndex(n => n.id === filtered[0].id);
+                if (firstResultIndex !== -1) {
+                    selectNakshatraAndPada(firstResultIndex, 0);
+                }
+            }
+        }
+
+        // VIEW TOGGLE LISTENERS
+        document.getElementById('viewWheelBtn').addEventListener('click', () => {
+            document.getElementById('wheelContainer').classList.remove('hidden');
+            document.getElementById('gridContainer').classList.add('hidden');
+            
+            document.getElementById('viewWheelBtn').className = 'px-3 py-1 rounded-full text-xs font-medium bg-amber-500 text-slate-950 shadow transition-all';
+            document.getElementById('viewGridBtn').className = 'px-3 py-1 rounded-full text-xs font-medium text-amber-300 hover:text-amber-100 transition-all';
+            
+            setupCanvasPixelRatio();
+            drawMandala();
+        });
+
+        document.getElementById('viewGridBtn').addEventListener('click', () => {
+            document.getElementById('wheelContainer').classList.add('hidden');
+            document.getElementById('gridContainer').classList.remove('hidden');
+
+            document.getElementById('viewGridBtn').className = 'px-3 py-1 rounded-full text-xs font-medium bg-amber-500 text-slate-950 shadow transition-all';
+            document.getElementById('viewWheelBtn').className = 'px-3 py-1 rounded-full text-xs font-medium text-amber-300 hover:text-amber-100 transition-all';
+        });
+
+        // SEARCH INPUT EVENT
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            handleSearch(e.target.value);
+        });
+
+        // RESET ROTATION BUTTON
+        document.getElementById('resetRotBtn').addEventListener('click', () => {
+            rotationAngle = -Math.PI / 2;
+            drawMandala();
+        });
+
+        // CANVAS EVENTS
+        canvas.addEventListener('click', handleCanvasClick);
+        canvas.addEventListener('mousemove', handleCanvasMouseMove);
+        canvas.addEventListener('mouseleave', () => {
+            hoverIndex = -1;
+            drawMandala();
+        });
+
+        // INITIALIZATION ON WINDOW LOAD
+        window.onload = function() {
+            initStarfield();
+            initPlanetLegend();
+            initQuickNakshatraList();
+            initTableView();
+            
+            setupCanvasPixelRatio();
+            selectNakshatraAndPada(0, 0);
+
+            window.addEventListener('resize', () => {
+                setupCanvasPixelRatio();
+                drawMandala();
+            });
+        };
+    </script>
+</body>
+</html>

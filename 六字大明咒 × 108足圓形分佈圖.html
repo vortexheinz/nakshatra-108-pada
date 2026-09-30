@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>六字大明咒 × 108足圓形分佈圖</title>
+<style>
+  :root{
+    --bg:#faf7f0; --ink:#2b2620; --sub:#7a6f60; --line:#c9bfae; --line2:#e4dcc9; --card:#ffffff; --mantra:#b8341f;
+    box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){--bg:#1b1812;--ink:#ece5d6;--sub:#b8ab93;--line:#4a4438;--line2:#332e26;--card:#242019;--mantra:#ff8a65;}
+  }
+  :root[data-theme="dark"]{--bg:#1b1812;--ink:#ece5d6;--sub:#b8ab93;--line:#4a4438;--line2:#332e26;--card:#242019;--mantra:#ff8a65;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px); height:100%;}
+  body{margin:0; min-height:100%; background:var(--bg); color:var(--ink); font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; display:flex; flex-direction:column; align-items:center; padding:12px 8px 24px;}
+  h1{font-size:15px; font-weight:600; color:var(--sub); margin:6px 0 2px; text-align:center;}
+  .note{font-size:11.5px; color:var(--sub); text-align:center; max-width:680px; line-height:1.7; margin-bottom:6px;}
+  .wrap{width:100%; max-width:860px; overflow-x:auto;}
+  svg{width:100%; height:auto; display:block; background:var(--card); border-radius:14px;}
+  .legend{font-size:11.5px; color:var(--ink); max-width:680px; margin-top:8px; line-height:1.9;}
+  .legend b{color:var(--mantra);}
+</style>
+</head>
+<body>
+<h1>六字大明咒（唵嘛呢叭咪吽）在 27宿・108足 圓形圖上的分佈</h1>
+<div class="note">內圈：宿名一字＋九曜符號＋梵音宿名（皆沿半徑方向書寫，避免擁擠）　｜　外圈：108足梵音音名　｜　紅色為六字大明咒各字所匹配之足位，以連線標示其在圓上的分佈</div>
+<div class="wrap"><svg id="wheel" viewBox="0 0 980 980" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<div class="legend" id="legend"></div>
+
+<script>
+const DATA = [
+ ['角','Citrā','♂',['Pe','Po','Ra','Ri']],
+ ['亢','Svāti','☊',['Ru','Re','Ro','Ta']],
+ ['氐','Viśākhā','♃',['Ti','Tu','Te','To']],
+ ['房','Anurādhā','♄',['Na','Ni','Nu','Ne']],
+ ['心','Jyeṣṭhā','☿',['No','Ya','Yi','Yu']],
+ ['尾','Mūla','☋',['Ye','Yo','Bha','Bhi']],
+ ['箕','Pūrvāṣāḍhā','♀',['Bhu','Dha','Pha','Dha']],
+ ['斗','Uttarāṣāḍhā','☉',['Bhe','Bho','Ja','Ji']],
+ ['女','Śravaṇa','☽',['Ju','Je','Jo','Gha']],
+ ['虛','Dhaniṣṭhā','♂',['Ga','Gi','Gu','Ge']],
+ ['危','Śatabhiṣā','☊',['Go','Sa','Si','Su']],
+ ['室','Pūrva-Bhādrapadā','♃',['Se','So','Da','Di']],
+ ['壁','Uttara-Bhādrapadā','♄',['Du','Tha','Jha','Na']],
+ ['奎','Revatī','☿',['De','Do','Cha','Chi']],
+ ['婁','Aśvinī','☋',['Chu','Che','Cho','La']],
+ ['胃','Bharaṇī','♀',['Li','Lu','Le','Lo']],
+ ['昴','Kṛttikā','☉',['A','I','U','E']],
+ ['畢','Rohiṇī','☽',['O','Va','Vi','Vu']],
+ ['觜','Mṛgaśirā','♂',['Ve','Vo','Ka','Ki']],
+ ['參','Ārdrā','☊',['Ku','Gha','Nga','Chha']],
+ ['井','Punarvasu','♃',['Ke','Ko','Ha','Hi']],
+ ['鬼','Puṣya','♄',['Hu','He','Ho','Da']],
+ ['柳','Aśleṣā','☿',['Di','Du','De','Do']],
+ ['星','Maghā','☋',['Ma','Mi','Mu','Me']],
+ ['張','Pūrva-Phalgunī','♀',['Mo','Ta','Ti','Tu']],
+ ['翼','Uttara-Phalgunī','☉',['Te','To','Pa','Pi']],
+ ['軫','Hastā','☽',['Pu','Sha','Na','Tha']],
+];
+const COLOR = {'♂':'#e74c3c','☊':'#7d5fff','♃':'#f5a623','♄':'#5c7080','☿':'#16a085','☋':'#8d6e63','♀':'#ff5fa2','☉':'#e8b800','☽':'#4f9dff'};
+
+// 六字大明咒 → 108足 最接近字音之匹配 (足音表僅收字頭音，故 Pad/Hūṃ 取最近似字頭)
+const MANTRA = [
+  {idx:17, k:0, zh:'唵', rom:'Oṃ',  note:'≈ O（畢宿・足一）'},
+  {idx:23, k:0, zh:'嘛', rom:'Ma',  note:'= Ma（星宿・足一）'},
+  {idx:3,  k:1, zh:'呢', rom:'Ṇi', note:'= Ni（房宿・足二）'},
+  {idx:25, k:2, zh:'叭', rom:'Pad', note:'≈ Pa（翼宿・足三）'},
+  {idx:23, k:3, zh:'咪', rom:'Me',  note:'= Me（星宿・足四）'},
+  {idx:21, k:0, zh:'吽', rom:'Hūṃ', note:'≈ Hu（鬼宿・足一）'},
+];
+
+const NS='http://www.w3.org/2000/svg';
+const svg=document.getElementById('wheel');
+const cx=490, cy=490;
+const R0=100, R1=345, R2=345, R3=430;
+const N=27, secAng=360/N, padAng=secAng/4;
+
+function pol(ang,r){ const rad=(ang-90)*Math.PI/180; return {x:cx+r*Math.cos(rad), y:cy+r*Math.sin(rad)}; }
+function el(tag,attrs){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
+function wedge(a0,a1,ri,ro,fill,stroke){
+  const p1=pol(a0,ri),p2=pol(a1,ri),p3=pol(a1,ro),p4=pol(a0,ro);
+  const d=`M ${p1.x} ${p1.y} A ${ri} ${ri} 0 0 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${ro} ${ro} 0 0 1 ${p4.x} ${p4.y} Z`;
+  return el('path',{d, fill, stroke, 'stroke-width':1});
+}
+// 徑向文字：文字沿半徑「向外」書寫，依左右半圓自動翻轉，不會倒置、不會與相鄰宿字擠在一起
+function radialLabel(ang,r,str,size,weight,color,italic){
+  const p=pol(ang,r);
+  const theta=ang-90;
+  const leftSide = p.x < cx - 0.001;
+  const rot = leftSide ? theta+180 : theta;
+  const anchor = leftSide ? 'end' : 'start';
+  const t=el('text',{x:p.x,y:p.y,'text-anchor':anchor,'dominant-baseline':'middle',
+      'font-size':size,'font-weight':weight||400, transform:`rotate(${rot} ${p.x} ${p.y})`});
+  if(color) t.setAttribute('fill',color);
+  if(italic) t.setAttribute('font-style','italic');
+  t.textContent=str;
+  return t;
+}
+function midText(ang,r,str,size,weight,color){
+  const p=pol(ang,r);
+  const t=el('text',{x:p.x,y:p.y,'text-anchor':'middle','dominant-baseline':'middle','font-size':size,'font-weight':weight||400});
+  if(color) t.setAttribute('fill',color);
+  t.textContent=str; return t;
+}
+
+svg.appendChild(el('circle',{cx,cy,r:R0-4,fill:'none',stroke:'var(--line)','stroke-width':1.2}));
+svg.appendChild(midText(0,0,'',1,400)); // no-op placeholder skip
+svg.appendChild((()=>{const t=el('text',{x:cx,y:cy-8,'text-anchor':'middle','font-size':15,'font-weight':700}); t.textContent='二十七宿'; return t;})());
+svg.appendChild((()=>{const t=el('text',{x:cx,y:cy+12,'text-anchor':'middle','font-size':10,'fill':'var(--sub)'}); t.textContent='九曜・百八足'; return t;})());
+
+DATA.forEach((row,i)=>{
+  const [han,sox,sym,padas]=row;
+  const a0=i*secAng, a1=a0+secAng, amid=a0+secAng/2;
+  const col=COLOR[sym];
+
+  svg.appendChild(wedge(a0,a1,R0,R1,col+'1c',col+'70'));
+  svg.appendChild(radialLabel(amid,R0+40,han,21,700));
+  svg.appendChild(midText(amid,R0+82,sym,16,400,col));
+  svg.appendChild(radialLabel(amid,R0+112,sox,10,500,'var(--sub)',true));
+
+  for(let k=0;k<4;k++){
+    const b0=a0+k*padAng, b1=b0+padAng, bmid=b0+padAng/2;
+    svg.appendChild(wedge(b0,b1,R2,R3, k%2? col+'10':col+'20', 'var(--line2)'));
+    svg.appendChild(radialLabel(bmid,R2+15,padas[k],10.5,500));
+  }
+  const q0=pol(a0,R0-4), q1=pol(a0,R3);
+  svg.appendChild(el('line',{x1:q0.x,y1:q0.y,x2:q1.x,y2:q1.y,stroke:'var(--line)','stroke-width':1.3}));
+});
+svg.appendChild(el('circle',{cx,cy,r:R1,fill:'none',stroke:'var(--line)','stroke-width':1}));
+svg.appendChild(el('circle',{cx,cy,r:R3,fill:'none',stroke:'var(--line)','stroke-width':1.3}));
+
+// ---- 六字大明咒 疊加：連線＋標記 ----
+const markR = 405, labelR = 455;
+const pts = MANTRA.map(m=>{
+  const a0 = m.idx*secAng;
+  const ang = a0 + m.k*padAng + padAng/2;
+  return {...m, ang, p: pol(ang, markR)};
+});
+
+const pathD = pts.map((pt,i)=> (i===0?'M':'L') + pt.p.x + ' ' + pt.p.y).join(' ') + ' Z';
+svg.appendChild(el('path',{d:pathD, fill:'none', stroke:'var(--mantra)', 'stroke-width':2.2, 'stroke-dasharray':'2 4', opacity:0.85}));
+
+pts.forEach((pt,i)=>{
+  svg.appendChild(el('circle',{cx:pt.p.x, cy:pt.p.y, r:7, fill:'var(--mantra)', stroke:'var(--card)', 'stroke-width':2}));
+  svg.appendChild(midText(pt.ang, markR, String(i+1), 8.5, 700, 'var(--card)'));
+  svg.appendChild(radialLabel(pt.ang, labelR-14, pt.zh+' '+pt.rom, 13, 700, 'var(--mantra)'));
+});
+
+document.getElementById('legend').innerHTML =
+  '<b>六字大明咒對應足位</b>（依足音表僅收字頭音，Pad／Hūṃ 取最近似字頭）：<br>' +
+  pts.map((pt,i)=> `${i+1}. <b>${pt.zh}</b> ${pt.rom} → ${pt.note}`).join('　');
+</script>
+</body>
+</html>
